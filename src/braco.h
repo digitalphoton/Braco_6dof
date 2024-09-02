@@ -40,4 +40,10 @@ class Braco
 
   void init(void);
 
+  /*  TO-DO
+  void setExtension(uint16_t newExtension);
+  void setPulsoFlexao(uint16_t newPulsoFlexao);
+  void setPulsoRotacao(uint16_t newPulsoRotacao);
+  void setGarraFechada(bool newGarraFechada);
+  */
 };
