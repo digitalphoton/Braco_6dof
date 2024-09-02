@@ -16,10 +16,11 @@
 
 class Braco
 {
-  uint16_t curExtension;
-  uint16_t curPulsoFlexao;
-  uint16_t curPulsoRotacao;
-  bool garraFechada;
+  float curRotacao;
+  float curExtensao;
+  float curPulsoFlexao;
+  float curPulsoRotacao;
+  float curGarra;
 
   Servo rotacao{ROTACAO_CH, ROTACAO_PIN};
   Servo ombro{OMBRO_CH, OMBRO_PIN};
@@ -32,18 +33,19 @@ class Braco
 
   Braco(void)
   {
-    curExtension = 0;
-    curPulsoFlexao = 0;
-    curPulsoRotacao = 0;
-    garraFechada = false;
+    curRotacao = 0.0;
+    curExtensao = 0.0;
+    curPulsoFlexao = 0.0;
+    curPulsoRotacao = 0.0;
+    curGarra = 0.0;
   }
 
   void init(void);
+  void update(void);
 
-  /*  TO-DO
-  void setExtension(uint16_t newExtension);
-  void setPulsoFlexao(uint16_t newPulsoFlexao);
-  void setPulsoRotacao(uint16_t newPulsoRotacao);
-  void setGarraFechada(bool newGarraFechada);
-  */
+  void setRotacao(float newRotacao);
+  void setExtensao(float newExtensao);
+  void setPulsoFlexao(float newPulsoFlexao);
+  void setPulsoRotacao(float newPulsoRotacao);
+  void setGarra(float newGarra);
 };

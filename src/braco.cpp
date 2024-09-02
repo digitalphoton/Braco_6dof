@@ -20,3 +20,33 @@ void Braco::init(void)
   garra.init();
   garra.setPosition(0.0);
 }
+void Braco::update(void)
+{
+	rotacao.setPosition(curRotacao);
+	ombro.setPosition(curExtensao);
+	cotovelo.setPosition(curExtensao);
+	pulsoFlexao.setPosition(curPulsoFlexao);
+	pulsoRotacao.setPosition(curPulsoRotacao);
+	garra.setPosition(curGarra);
+}
+
+void Braco::setRotacao(float newRotacao)
+{
+	curRotacao = newRotacao;
+}
+void Braco::setExtensao(float newExtensao)
+{
+	curExtensao = newExtensao;
+}
+void Braco::setPulsoFlexao(float newPulsoFlexao)
+{
+	curPulsoFlexao = newPulsoFlexao;
+}
+void Braco::setPulsoRotacao(float newPulsoRotacao)
+{
+	curPulsoRotacao = newPulsoRotacao;
+}
+void Braco::setGarra(float newGarra)
+{
+	curGarra = newGarra;
+}
