@@ -19,6 +19,8 @@ void Braco::init(void)
 
   garra.init();
   garra.setPosition(0.0);
+
+  update();
 }
 void Braco::update(void)
 {
