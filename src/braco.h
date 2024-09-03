@@ -33,11 +33,11 @@ class Braco
 
   Braco(void)
   {
-    curRotacao = 0.0;
-    curExtensao = 0.0;
-    curPulsoFlexao = 0.0;
-    curPulsoRotacao = 0.0;
-    curGarra = 0.0;
+    curRotacao = 60.0;
+    curExtensao = 60.0;
+    curPulsoFlexao = 60.0;
+    curPulsoRotacao = 60.0;
+    curGarra = 60.0;
   }
 
   void init(void);
