@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
-#define SERVO_PWM_RES 16
-#define SERVO_PWM_FREQ 50
+#define GLOBAL_PWM_RES 16
+#define GLOBAL_PWM_FREQ 50
 
 class Servo
 {
@@ -10,7 +10,7 @@ class Servo
 
 	public:
 	
-	Servo(uint8_t newChannel, uint8_t newPin);
+	Servo(uint8_t newPin, uint8_t newChannel);
 	void init(void);
 	void setPosition(float posDegree);
 };
