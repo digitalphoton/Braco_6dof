@@ -17,7 +17,8 @@
 class Braco
 {
   float curRotacao;
-  float curExtensao;
+  float curOmbro;
+  float curCotovelo;
   float curPulsoFlexao;
   float curPulsoRotacao;
   float curGarra;
@@ -34,7 +35,8 @@ class Braco
   Braco(void)
   {
     curRotacao = 60.0;
-    curExtensao = 60.0;
+    curOmbro = 60.0;
+    curCotovelo = 60.0;
     curPulsoFlexao = 60.0;
     curPulsoRotacao = 60.0;
     curGarra = 60.0;
@@ -44,7 +46,8 @@ class Braco
   void update(void);
 
   void setRotacao(float newRotacao);
-  void setExtensao(float newExtensao);
+  void setOmbro(float newOmbro);
+  void setCotovelo(float newCotovelo);
   void setPulsoFlexao(float newPulsoFlexao);
   void setPulsoRotacao(float newPulsoRotacao);
   void setGarra(float newGarra);
