@@ -12,7 +12,7 @@ void Servo::init(void)
 }
 void Servo::setPosition(float posDegree)
 {
-	uint16_t dutyCycle = (posDegree+120)/2400.0 * 0xffff;
+	uint16_t dutyCycle = (posDegree+180)/2400.0 * 0xffff;
 
 	// O dutyCycle precisa ser invertido porque o servo é
 	//	acionado via um transistor NPN
