@@ -6,14 +6,16 @@ Braco braco;
 void setup()
 {
   braco.init();
-  delay(5000);
-  braco.setRotacao(60.0);
-  braco.setExtensao(60.0);
-  braco.setPulsoFlexao(60.0);
-  braco.setPulsoRotacao(60.0);
+  delay(2000);
 }
 
 void loop()
 {
+  braco.setPulsoFlexao(0.0);
   braco.update();
+  delay(2000);
+
+  braco.setPulsoFlexao(60.0);
+  braco.update();
+  delay(2000);
 }
