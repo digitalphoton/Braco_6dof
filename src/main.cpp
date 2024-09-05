@@ -11,7 +11,7 @@ void setup()
 
 void loop()
 {
-  braco.setPulsoFlexao(0.0);
+  braco.setPulsoFlexao(-60.0);
   braco.update();
   delay(2000);
 
