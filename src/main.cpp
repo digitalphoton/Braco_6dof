@@ -7,15 +7,12 @@ void setup()
 {
   braco.init();
   delay(2000);
+  braco.setOmbro(70.0);
+  braco.setCotovelo(0.0);
+  braco.setPulsoFlexao(-70.0);
+  braco.update();
 }
 
 void loop()
 {
-  braco.setPulsoFlexao(-60.0);
-  braco.update();
-  delay(2000);
-
-  braco.setPulsoFlexao(60.0);
-  braco.update();
-  delay(2000);
 }
