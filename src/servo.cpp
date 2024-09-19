@@ -16,7 +16,7 @@ void Servo::setPosition(float posDegree)
 
 	// O dutyCycle precisa ser invertido porque o servo é
 	//	acionado via um transistor NPN
-	dutyCycle = ~dutyCycle;
+	//dutyCycle = ~dutyCycle;
 
 	ledcWrite(channel, dutyCycle);
 }
