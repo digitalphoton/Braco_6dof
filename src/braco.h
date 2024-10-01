@@ -45,10 +45,10 @@ class Braco
   void init(void);
   void update(void);
 
-  void setRotacao(float newRotacao);
-  void setOmbro(float newOmbro);
-  void setCotovelo(float newCotovelo);
-  void setPulsoFlexao(float newPulsoFlexao);
-  void setPulsoRotacao(float newPulsoRotacao);
-  void setGarra(float newGarra);
+  void setRotacao(float newRotacao, bool doUpdate = false);
+  void setOmbro(float newOmbro, bool doUpdate = false);
+  void setCotovelo(float newCotovelo, bool doUpdate = false);
+  void setPulsoFlexao(float newPulsoFlexao, bool doUpdate = false);
+  void setPulsoRotacao(float newPulsoRotacao, bool doUpdate = false);
+  void setGarra(float newGarra, bool doUpdate = false);
 };
