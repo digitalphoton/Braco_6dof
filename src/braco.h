@@ -14,6 +14,8 @@
 #define GARRA_PIN 5
 #define GARRA_CH 5
 
+#define UPDATE_DELAY 1000
+
 class Braco
 {
   float curRotacao;

@@ -19,6 +19,7 @@ void Braco::update(void)
 	pulsoFlexao.setPosition(curPulsoFlexao);
 	pulsoRotacao.setPosition(curPulsoRotacao);
 	garra.setPosition(curGarra);
+	delay(UPDATE_DELAY);
 }
 
 void Braco::setRotacao(float newRotacao, bool doUpdate)
@@ -27,7 +28,7 @@ void Braco::setRotacao(float newRotacao, bool doUpdate)
 	if(doUpdate)
 	{
 		rotacao.setPosition(curRotacao);
-		delay(1000);
+		delay(UPDATE_DELAY);
 	}
 }
 void Braco::setOmbro(float newOmbro, bool doUpdate)
@@ -36,7 +37,7 @@ void Braco::setOmbro(float newOmbro, bool doUpdate)
 	if(doUpdate)
 	{
 		ombro.setPosition(curOmbro);
-		delay(1000);
+		delay(UPDATE_DELAY);
 	}
 }
 void Braco::setCotovelo(float newCotovelo, bool doUpdate)
@@ -45,7 +46,7 @@ void Braco::setCotovelo(float newCotovelo, bool doUpdate)
 	if(doUpdate)
 	{
 		cotovelo.setPosition(curCotovelo);
-		delay(1000);
+		delay(UPDATE_DELAY);
 	}
 }
 void Braco::setPulsoFlexao(float newPulsoFlexao, bool doUpdate)
@@ -54,7 +55,7 @@ void Braco::setPulsoFlexao(float newPulsoFlexao, bool doUpdate)
 	if(doUpdate)
 	{
 		pulsoFlexao.setPosition(curPulsoFlexao);
-		delay(1000);
+		delay(UPDATE_DELAY);
 	}
 }
 void Braco::setPulsoRotacao(float newPulsoRotacao, bool doUpdate)
@@ -63,7 +64,7 @@ void Braco::setPulsoRotacao(float newPulsoRotacao, bool doUpdate)
 	if(doUpdate)
 	{
 		pulsoRotacao.setPosition(curPulsoRotacao);
-		delay(1000);
+		delay(UPDATE_DELAY);
 	}
 }
 void Braco::setGarra(float newGarra, bool doUpdate)
@@ -72,6 +73,6 @@ void Braco::setGarra(float newGarra, bool doUpdate)
 	if(doUpdate)
 	{
 		garra.setPosition(curGarra);
-		delay(1000);
+		delay(UPDATE_DELAY);
 	}
 }
