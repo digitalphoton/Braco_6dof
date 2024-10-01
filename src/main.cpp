@@ -34,4 +34,27 @@ void setup()
 
 void loop()
 {
+  braco.setRotacao(-70.0);
+  braco.setPulsoFlexao(-70.0);
+  braco.setGarra(70.0);
+  braco.setPulsoFlexao(0.0);
+  braco.setRotacao(0.0);
+
+  braco.setRotacao(70.0);
+  braco.setPulsoFlexao(-70.0);
+  braco.setGarra(0.0);
+  braco.setPulsoFlexao(0.0);
+  braco.setRotacao(0.0);
+
+  braco.setRotacao(70.0);
+  braco.setPulsoFlexao(-70.0);
+  braco.setGarra(70.0);
+  braco.setPulsoFlexao(0.0);
+  braco.setRotacao(0.0);
+
+  braco.setRotacao(-70.0);
+  braco.setPulsoFlexao(-70.0);
+  braco.setGarra(0.0);
+  braco.setPulsoFlexao(0.0);
+  braco.setRotacao(0.0);
 }
