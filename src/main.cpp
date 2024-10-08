@@ -27,7 +27,7 @@ void setup()
   delay(5000);
   
   braco.setOmbro(70.0);
-  braco.setCotovelo(0.0);
+  braco.setCotovelo(-70.0);
   braco.setPulsoFlexao(-70.0);
   braco.update();
 }
