@@ -6,5 +6,4 @@ Os servos são alimentados com 6 volts de uma fonte externa, e o sinal de contro
 
 ## TO-DO
 
-- Adaptar o código para uma máquina de estados
 - Implementar um sistema de interpolação para o controle, fazendo com que o servo vá gradualmente para a posição de destino
