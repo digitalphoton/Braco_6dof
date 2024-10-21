@@ -6,4 +6,9 @@ Os servos são alimentados com 6 volts de uma fonte externa, e o sinal de contro
 
 ## TO-DO
 
-- Implementar um sistema de interpolação para o controle, fazendo com que o servo vá gradualmente para a posição de destino
+### Controle manual
+
+- Implementar uma função que receba um comando e atue o servo correspondente
+- Extender essa função para um botão
+- Extender essa função para um controle analógico
+	- O valor analógico modula o feedrate?
