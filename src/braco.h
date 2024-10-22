@@ -1,6 +1,9 @@
 #include <Arduino.h>
 #include "servo.h"
 
+#ifndef BRACO_H
+#define BRACO_H
+
 #define ROTACAO_PIN 15
 #define ROTACAO_CH 0
 #define OMBRO_PIN 2
@@ -58,4 +61,8 @@ class Braco
   void setPulsoFlexao(float newPulsoFlexao, bool doUpdate = false);
   void setPulsoRotacao(float newPulsoRotacao, bool doUpdate = false);
   void setGarra(float newGarra, bool doUpdate = false);
+
+  void atuar(char comando, float argumento);
 };
+
+#endif

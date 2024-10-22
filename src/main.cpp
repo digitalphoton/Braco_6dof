@@ -1,10 +1,18 @@
 #include <Arduino.h>
 #include "braco.h"
 
+#include <string>
+
+typedef enum {STARTUP, STANDBY, RECEIVING, MOVING} Estados;
+
 Braco braco;
+Estados estado;
+
 
 void setup()
 {
+  estado = STARTUP;
+
   Serial.begin(115200);
   while(!Serial);
   delay(1000);
@@ -24,17 +32,19 @@ void setup()
 
   delay(2000);
   Serial.println("Braço inicializado!");
-  delay(5000);
+  delay(2000);
   
   braco.setOmbro(70.0);
   braco.setCotovelo(-70.0);
   braco.setPulsoFlexao(-70.0);
   braco.update();
+
+  estado = STANDBY;
 }
 
 void loop()
 {
-  braco.setRotacao(-70.0, true);
+  /*braco.setRotacao(-70.0, true);
   braco.setPulsoFlexao(-70.0, true);
   braco.setGarra(70.0, true);
   braco.setPulsoFlexao(0.0, true);
@@ -56,5 +66,36 @@ void loop()
   braco.setPulsoFlexao(-70.0, true);
   braco.setGarra(0.0, true);
   braco.setPulsoFlexao(0.0, true);
-  braco.setRotacao(0.0, true);
+  braco.setRotacao(0.0, true);*/
+
+  switch(estado)
+  {
+    default:
+    case STANDBY:
+      if(Serial.available())
+      {
+        estado = RECEIVING;
+      }
+      break;
+
+    case RECEIVING:
+      char receiveBuffer[10];
+      for(uint8_t i; i < 10; i++)
+      {
+        receiveBuffer[i] = Serial.read();
+        if(receiveBuffer[i] == '\n')
+        {
+          receiveBuffer[i] = '\0';
+          break;
+        }
+      }
+      // primeiro caractere vai para comando, o resto da string é convertida
+      // para número e vai para argumento
+      char comando = receiveBuffer[0];
+      float argumento = atof(&receiveBuffer[1]);
+      braco.atuar(comando, argumento);
+
+      estado = STANDBY;
+      break;
+  }
 }

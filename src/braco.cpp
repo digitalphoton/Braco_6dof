@@ -183,3 +183,52 @@ void Braco::setGarra(float newGarra, bool doUpdate)
 		while(millis() < lastMillis + UPDATE_STEP);
 	}
 }
+
+// recebe um comando e um argumento, atua o servo respectivo
+void Braco::atuar(char comando, float argumento)
+{
+  switch(comando)
+  {
+    default:
+      Serial.println("Comando não reconhecido!");
+      return;
+    
+    case 'Q':
+    case 'q':
+      setRotacao(argumento);
+      Serial.print("Rotação definida para ");
+      break;
+      
+    case 'W':
+    case 'w':
+      setOmbro(argumento);
+      Serial.print("Posição do Ombro definida para ");
+      break;
+
+    case 'E':
+    case 'e':
+      setCotovelo(argumento);
+      Serial.print("Posição do Cotovelo definida para ");
+      break;
+
+    case 'R':
+    case 'r':
+      setPulsoFlexao(argumento);
+      Serial.print("Flexão do Pulso definida para ");
+      break;
+
+    case 'T':
+    case 't':
+      setPulsoRotacao(argumento);
+      Serial.print("Rotacao do Pulso definida para ");
+      break;
+
+    case 'F':
+    case 'f':
+      setGarra(argumento);
+      Serial.print("Posição da Garra definida para ");
+      break;
+  }
+  Serial.print(argumento);
+  Serial.println();
+}
