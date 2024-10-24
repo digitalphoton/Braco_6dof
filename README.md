@@ -9,6 +9,8 @@ Os servos são alimentados com 6 volts de uma fonte externa, e o sinal de contro
 ### Controle manual
 
 - ~~Implementar uma função que receba um comando e atue o servo correspondente~~
-- Extender essa função para um botão
-- Extender essa função para um controle analógico
-	- O valor analógico modula o feedrate?
+	- Extender essa função para um botão
+	- Extender essa função para um controle analógico
+		- O valor analógico modula o feedrate?
+
+- (Urgente!!) Limites de movimento para os servos
