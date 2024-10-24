@@ -45,9 +45,9 @@ class Braco
   Braco(void)
   {
     curRotacao = 0.0;
-    curOmbro = 0.0;
-    curCotovelo = 0.0;
-    curPulsoFlexao = 0.0;
+    curOmbro = 70.0;
+    curCotovelo = -70.0;
+    curPulsoFlexao = -70.0;
     curPulsoRotacao = 0.0;
     curGarra = 0.0;
   }
