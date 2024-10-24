@@ -33,11 +33,6 @@ void setup()
   delay(2000);
   Serial.println("Braço inicializado!");
   delay(2000);
-  
-  braco.setOmbro(70.0);
-  braco.setCotovelo(-70.0);
-  braco.setPulsoFlexao(-70.0);
-  braco.update();
 
   estado = STANDBY;
 }
