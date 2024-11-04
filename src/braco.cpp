@@ -9,19 +9,20 @@ void Braco::init(void)
   pulsoRotacao.init();
   garra.init();
 
-  update();
+  //update();
 }
 void Braco::update(void)
 {
-	rotacao.setPosition(curRotacao);
-	ombro.setPosition(curOmbro);
-	cotovelo.setPosition(curCotovelo);
-	pulsoFlexao.setPosition(curPulsoFlexao);
-	pulsoRotacao.setPosition(curPulsoRotacao);
-	garra.setPosition(curGarra);
-	delay(UPDATE_DELAY);
+	rotacao.step();
+	ombro.step();
+	cotovelo.step();
+	pulsoFlexao.step();
+	pulsoRotacao.step();
+	garra.step();
+	//delay(UPDATE_DELAY);
 }
 
+/*
 void Braco::setRotacao(float newRotacao, bool doUpdate)
 {
 	//curRotacao = newRotacao;
@@ -232,3 +233,4 @@ void Braco::atuar(char comando, float argumento)
   Serial.print(argumento);
   Serial.println();
 }
+*/

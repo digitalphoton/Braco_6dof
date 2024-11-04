@@ -33,14 +33,14 @@ class Braco
   float curPulsoRotacao;
   float curGarra;
 
-  Servo rotacao{ROTACAO_PIN, ROTACAO_CH};
-  Servo ombro{OMBRO_PIN, OMBRO_CH};
-  Servo cotovelo{COTOVELO_PIN, COTOVELO_CH};
-  Servo pulsoFlexao{PULSOFLEXAO_PIN, PULSOFLEXAO_CH};
-  Servo pulsoRotacao{PULSOROTACAO_PIN, PULSOROTACAO_CH};
-  Servo garra{GARRA_PIN, GARRA_CH};
-
   public:
+
+  Servo rotacao{ROTACAO_PIN, ROTACAO_CH, -70.0, +70.0, 0.0};
+  Servo ombro{OMBRO_PIN, OMBRO_CH, 0.0, +70.0, +70.0};
+  Servo cotovelo{COTOVELO_PIN, COTOVELO_CH, -70.0, +70.0, -70.0};
+  Servo pulsoFlexao{PULSOFLEXAO_PIN, PULSOFLEXAO_CH, -70.0, 0.0, -70.0};
+  Servo pulsoRotacao{PULSOROTACAO_PIN, PULSOROTACAO_CH, -45.0, +45.0, 0.0};
+  Servo garra{GARRA_PIN, GARRA_CH, 0.0, +30.0, 0.0};
 
   Braco(void)
   {
@@ -55,12 +55,14 @@ class Braco
   void init(void);
   void update(void);
 
+  /*
   void setRotacao(float newRotacao, bool doUpdate = false);
   void setOmbro(float newOmbro, bool doUpdate = false);
   void setCotovelo(float newCotovelo, bool doUpdate = false);
   void setPulsoFlexao(float newPulsoFlexao, bool doUpdate = false);
   void setPulsoRotacao(float newPulsoRotacao, bool doUpdate = false);
   void setGarra(float newGarra, bool doUpdate = false);
+  */
 
   void atuar(char comando, float argumento);
 };
