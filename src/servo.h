@@ -6,10 +6,14 @@
 #define GLOBAL_PWM_RES 16
 #define GLOBAL_PWM_FREQ 50
 
+#define UPDATE_STEP 20
+
 class Servo
 {
 	uint8_t channel;
 	uint8_t pin;
+	float curPosDegree;
+	float feedRate;
 
 	public:
 	
