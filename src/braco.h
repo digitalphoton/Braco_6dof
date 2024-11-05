@@ -17,11 +17,9 @@
 #define GARRA_PIN 5
 #define GARRA_CH 5
 
-#define UPDATE_DELAY 3000
+//#define UPDATE_DELAY 3000
 // Feedrate em graus por egundo
 #define FEEDRATE 50.0
-// Intervalo de tempo entre updates, em millisegundos
-#define UPDATE_STEP 20
 #define STEP_SIZE (FEEDRATE * 0.001 * UPDATE_STEP)
 
 class Braco

@@ -3,11 +3,15 @@
 
 #include <string>
 
-typedef enum {STARTUP, STANDBY, RECEIVING, MOVING} Estados;
+// Intervalo de tempo entre updates, em millisegundos
+#define UPDATE_STEP 20
+
+typedef enum {STARTUP, STANDBY, RECEIVING, MOVING, UPDATING} Estados;
 
 Braco braco;
 Estados estado;
 
+unsigned long g_tickLastUpdate = 0;
 
 void setup()
 {
@@ -69,13 +73,20 @@ void loop()
 	{
 		default:
 		case STANDBY:
+		{
 			if(Serial.available())
 			{
 				estado = RECEIVING;
 			}
+			if(g_tickLastUpdate >= UPDATE_STEP)
+			{
+				estado = UPDATING;
+			}
 			break;
+		}
 
 		case RECEIVING:
+		{
 			char receiveBuffer[10];
 			for(uint8_t i; i < 10; i++)
 			{
@@ -94,5 +105,13 @@ void loop()
 
 			estado = STANDBY;
 			break;
+		}
+		case UPDATING:
+		{
+			braco.update();
+			estado = STANDBY;
+			g_tickLastUpdate = tickAtual;
+			break;
+		}
 	}
 }
