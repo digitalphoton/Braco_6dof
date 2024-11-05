@@ -2,12 +2,12 @@
 
 void Braco::init(void)
 {
-  rotacao.init();
-  ombro.init();
-  cotovelo.init();
-  pulsoFlexao.init();
-  pulsoRotacao.init();
-  garra.init();
+	rotacao.init();
+	ombro.init();
+	cotovelo.init();
+	pulsoFlexao.init();
+	pulsoRotacao.init();
+	garra.init();
 
   //update();
 }
