@@ -13,4 +13,4 @@ Os servos são alimentados com 6 volts de uma fonte externa, e o sinal de contro
 	- Extender essa função para um controle analógico
 		- O valor analógico modula o feedrate?
 
-- (Urgente!!) Limites de movimento para os servos
+- ~~(Urgente!!) Limites de movimento para os servos~~
