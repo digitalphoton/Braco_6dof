@@ -21,6 +21,8 @@ class Servo
 	float targetPosDegree;
 	float stepValue;
 
+	float feedRate;
+
 	void setPosition(float posDegree);
 
 	public:
@@ -33,7 +35,8 @@ class Servo
 		float initPosDegree
 	);
 	void init(void);
-	void setTargetPosition(float posDegree, float feedRate);
+	void setFeedRate(float newFeedRate);
+	void setTargetPosition(float posDegree);
 	void step(void);
 };
 #endif

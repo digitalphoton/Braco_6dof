@@ -1,12 +1,6 @@
 #include "servo.h"
 
-Servo::Servo(
-	uint8_t newPin,
-	uint8_t newChannel,
-	float newMinPosDegree,
-	float newMaxPosDegree,
-	float initPosDegree
-)
+Servo::Servo( uint8_t newPin, uint8_t newChannel, float newMinPosDegree, float newMaxPosDegree, float initPosDegree)
 {
 	channel = newChannel;
 	pin = newPin;
@@ -28,7 +22,11 @@ void Servo::setPosition(float posDegree)
 	//dutyCycle = ~dutyCycle;
 	ledcWrite(channel, dutyCycle);
 }
-void Servo::setTargetPosition(float newPosDegree, float feedRate)
+void Servo::setFeedRate(float newFeedRate)
+{
+	feedRate = newFeedRate;
+}
+void Servo::setTargetPosition(float newPosDegree)
 {
 	float delta = newPosDegree - curPosDegree;
 	float stepValue = feedRate * 0.001 * UPDATE_STEP;
