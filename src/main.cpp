@@ -78,7 +78,7 @@ void loop()
 			{
 				estado = RECEIVING;
 			}
-			if(g_tickLastUpdate >= UPDATE_STEP)
+			if(tickAtual >= g_tickLastUpdate + UPDATE_STEP)
 			{
 				estado = UPDATING;
 			}

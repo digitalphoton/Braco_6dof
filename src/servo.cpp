@@ -28,11 +28,20 @@ void Servo::setFeedRate(float newFeedRate)
 }
 void Servo::setTargetPosition(float newPosDegree)
 {
-	float delta = newPosDegree - curPosDegree;
-	float stepValue = feedRate * 0.001 * UPDATE_STEP;
+	if(newPosDegree > maxPosDegree)
+	{
+		newPosDegree = maxPosDegree;
+	}
+	if(newPosDegree < minPosDegree)
+	{
+		newPosDegree = minPosDegree;
+	}
+	targetPosDegree = newPosDegree;
+
+	stepValue = feedRate * 0.001 * UPDATE_STEP;
 	//unsigned long stepCount = abs( delta / stepValue );
 
-	if(delta < 0)
+	if(newPosDegree < curPosDegree)
 	{
 		stepValue = -stepValue;
 	}

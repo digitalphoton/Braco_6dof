@@ -9,6 +9,13 @@ void Braco::init(void)
 	pulsoRotacao.init();
 	garra.init();
 
+	rotacao.setFeedRate(50.0);
+	ombro.setFeedRate(50.0);
+	cotovelo.setFeedRate(50.0);
+	pulsoFlexao.setFeedRate(50.0);
+	pulsoRotacao.setFeedRate(50.0);
+	garra.setFeedRate(50.0);
+
 	//update();
 }
 void Braco::update(void)
@@ -191,45 +198,45 @@ void Braco::atuar(char comando, float argumento)
 {
 	switch(comando)
 	{
-	default:
-		Serial.println("Comando não reconhecido!");
-		return;
-	
-	case 'Q':
-	case 'q':
-		rotacao.setTargetPosition(argumento);
-		Serial.print("Rotação definida para ");
-		break;
+		default:
+			Serial.println("Comando não reconhecido!");
+			return;
 		
-	case 'W':
-	case 'w':
-		ombro.setTargetPosition(argumento);
-		Serial.print("Posição do Ombro definida para ");
-		break;
+		case 'Q':
+		case 'q':
+			rotacao.setTargetPosition(argumento);
+			Serial.print("Rotação definida para ");
+			break;
+			
+		case 'W':
+		case 'w':
+			ombro.setTargetPosition(argumento);
+			Serial.print("Posição do Ombro definida para ");
+			break;
 
-	case 'E':
-	case 'e':
-		cotovelo.setTargetPosition(argumento);
-		Serial.print("Posição do Cotovelo definida para ");
-		break;
+		case 'E':
+		case 'e':
+			cotovelo.setTargetPosition(argumento);
+			Serial.print("Posição do Cotovelo definida para ");
+			break;
 
-	case 'R':
-	case 'r':
-		pulsoFlexao.setTargetPosition(argumento);
-		Serial.print("Flexão do Pulso definida para ");
-		break;
+		case 'R':
+		case 'r':
+			pulsoFlexao.setTargetPosition(argumento);
+			Serial.print("Flexão do Pulso definida para ");
+			break;
 
-	case 'T':
-	case 't':
-		pulsoRotacao.setTargetPosition(argumento);
-		Serial.print("Rotacao do Pulso definida para ");
-		break;
+		case 'T':
+		case 't':
+			pulsoRotacao.setTargetPosition(argumento);
+			Serial.print("Rotacao do Pulso definida para ");
+			break;
 
-	case 'F':
-	case 'f':
-		garra.setTargetPosition(argumento);
-		Serial.print("Posição da Garra definida para ");
-		break;
+		case 'F':
+		case 'f':
+			garra.setTargetPosition(argumento);
+			Serial.print("Posição da Garra definida para ");
+			break;
 	}
 	Serial.print(argumento);
 	Serial.println();
