@@ -19,7 +19,7 @@
 
 //#define UPDATE_DELAY 3000
 // Feedrate em graus por egundo
-#define FEEDRATE 50.0
+#define FEEDRATE 20.0
 #define STEP_SIZE (FEEDRATE * 0.001 * UPDATE_STEP)
 
 class Braco
@@ -34,7 +34,7 @@ class Braco
   public:
 
   Servo rotacao{ROTACAO_PIN, ROTACAO_CH, -70.0, +70.0, 0.0};
-  Servo ombro{OMBRO_PIN, OMBRO_CH, 0.0, -30.0, 0.0};
+  Servo ombro{OMBRO_PIN, OMBRO_CH, -30.0, +70.0, 0.0};
   Servo cotovelo{COTOVELO_PIN, COTOVELO_CH, -70.0, +70.0, -70.0};
   Servo pulsoFlexao{PULSOFLEXAO_PIN, PULSOFLEXAO_CH, -70.0, 30.0, 0.0};
   Servo pulsoRotacao{PULSOROTACAO_PIN, PULSOROTACAO_CH, -70.0, +70.0, 0.0};

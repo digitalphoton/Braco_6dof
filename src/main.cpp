@@ -74,13 +74,13 @@ void loop()
 		default:
 		case STANDBY:
 		{
-			if(Serial.available())
-			{
-				estado = RECEIVING;
-			}
 			if(tickAtual >= g_tickLastUpdate + UPDATE_STEP)
 			{
 				estado = UPDATING;
+			}
+			if(Serial.available())
+			{
+				estado = RECEIVING;
 			}
 			break;
 		}

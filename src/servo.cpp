@@ -4,74 +4,61 @@ Servo::Servo( uint8_t newPin, uint8_t newChannel, float newMinPosDegree, float n
 {
 	channel = newChannel;
 	pin = newPin;
-	curPosDegree = initPosDegree;
-	minPosDegree = newMinPosDegree;
-	maxPosDegree = newMaxPosDegree;
+	minDuty = _DEGREE_TO_DUTY(newMinPosDegree);
+	maxDuty = _DEGREE_TO_DUTY(newMaxPosDegree);
+	curDuty = _DEGREE_TO_DUTY(initPosDegree);
+	targetDuty = curDuty;
 }
 void Servo::init(void)
 {
 	ledcAttachPin(pin, channel);
 	ledcSetup(channel, GLOBAL_PWM_FREQ, GLOBAL_PWM_RES);
-	setPosition(curPosDegree);
+	setPosition(curDuty);
 }
-void Servo::setPosition(float posDegree)
+void Servo::setPosition(uint16_t newDuty)
 {
-	uint16_t dutyCycle = (curPosDegree+180)/2400.0 * 0xffff;
-	// O dutyCycle precisa ser invertido quando o servo é acionado via um
-	// transistor NPN
-	//dutyCycle = ~dutyCycle;
-	ledcWrite(channel, dutyCycle);
+	ledcWrite(channel, newDuty);
 }
 void Servo::setFeedRate(float newFeedRate)
 {
-	feedRate = newFeedRate;
+	stepValue = _DEGREE_TO_DUTY(newFeedRate * 0.001 * UPDATE_STEP);
 }
-void Servo::setTargetPosition(float newPosDegree)
+float Servo::setTargetPosition(float newPosDegree, float newFeedRate)
 {
-	if(newPosDegree > maxPosDegree)
-	{
-		newPosDegree = maxPosDegree;
-	}
-	if(newPosDegree < minPosDegree)
-	{
-		newPosDegree = minPosDegree;
-	}
-	targetPosDegree = newPosDegree;
+	uint16_t newDuty = _DEGREE_TO_DUTY(newPosDegree);
+	setFeedRate(newFeedRate);
 
-	stepValue = feedRate * 0.001 * UPDATE_STEP;
-	//unsigned long stepCount = abs( delta / stepValue );
-
-	if(newPosDegree < curPosDegree)
+	if(newDuty > maxDuty)
 	{
-		stepValue = -stepValue;
+		newDuty = maxDuty;
+	}
+	if(newDuty < minDuty)
+	{
+		newDuty = minDuty;
 	}
 
+	stepCount = (newDuty - curDuty)/(stepValue);
+	targetDuty = newDuty;
 
-/*
-	for(stepCount; stepCount > 0; stepCount--)
-	{
-		unsigned long lastMillis = millis();
-
-		curPosDegree += stepValue;
-
-		setPosition(curPosDegree);
-
-		while( millis() < lastMillis + UPDATE_STEP);
-	}
-*/
+	return _DUTY_TO_DEGREE(targetDuty);
 }
 void Servo::step(void)
 {
-	if(stepValue == 0.0) 
+	// Nenhum passo para fazer
+	if(stepCount == 0)
 	{
-		return;
+		curDuty = targetDuty;
 	}
-
-	curPosDegree += stepValue;
-	setPosition(curPosDegree);
-
-	if( abs(curPosDegree - targetPosDegree) < TOLERANCE)
+	// stepCount é positivo quando estamos subindo e negativo quando descendo
+	else if(stepCount > 0)
 	{
-		stepValue = 0.0;
+		curDuty += stepValue;
+		stepCount--;
 	}
+	else
+	{
+		curDuty -= stepValue;
+		stepCount++	;
+	}
+	setPosition(curDuty);
 }
