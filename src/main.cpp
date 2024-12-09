@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "braco.h"
+#include <ServoBraco.h>
 
 #include <string>
 
@@ -97,8 +97,8 @@ void loop()
 					break;
 				}
 			}
-			// primeiro caractere vai para comando, o resto da string é convertida
-			// para número e vai para argumento
+			// primeiro caractere vai para comando, o resto da string é
+			// convertida para número e vai para argumento
 			char comando = receiveBuffer[0];
 			float argumento = atof(&receiveBuffer[1]);
 			braco.atuar(comando, argumento);
