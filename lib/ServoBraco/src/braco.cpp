@@ -205,37 +205,37 @@ void Braco::atuar(char comando, float argumento)
 		case 'Q':
 		case 'q':
 			Serial.print("Rotação definida para ");
-			Serial.print( rotacao.setTargetPosition(argumento, FEEDRATE) );
+			Serial.print( rotacao.setTargetPosition(argumento) );
 			break;
 			
 		case 'W':
 		case 'w':
 			Serial.print("Posição do Ombro definida para ");
-			Serial.print( ombro.setTargetPosition(argumento, FEEDRATE) );
+			Serial.print( ombro.setTargetPosition(argumento) );
 			break;
 
 		case 'E':
 		case 'e':
 			Serial.print("Posição do Cotovelo definida para ");
-			Serial.print( cotovelo.setTargetPosition(argumento, FEEDRATE) );
+			Serial.print( cotovelo.setTargetPosition(argumento) );
 			break;
 
 		case 'R':
 		case 'r':
 			Serial.print("Flexão do Pulso definida para ");
-			Serial.print( pulsoFlexao.setTargetPosition(argumento, FEEDRATE) );
+			Serial.print( pulsoFlexao.setTargetPosition(argumento) );
 			break;
 
 		case 'T':
 		case 't':
 			Serial.print("Rotacao do Pulso definida para ");
-			Serial.print( pulsoRotacao.setTargetPosition(argumento, FEEDRATE) );
+			Serial.print( pulsoRotacao.setTargetPosition(argumento) );
 			break;
 
 		case 'F':
 		case 'f':
 			Serial.print("Posição da Garra definida para ");
-			Serial.print( garra.setTargetPosition(argumento, FEEDRATE) );
+			Serial.print( garra.setTargetPosition(argumento) );
 			break;
 	}
 	Serial.println();

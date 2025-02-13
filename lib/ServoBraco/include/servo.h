@@ -11,6 +11,7 @@
 
 #define UPDATE_STEP 20
 #define TOLERANCE 0.1
+#define DEFAULT_FEEDRATE 20.0
 
 class Servo
 {
@@ -46,7 +47,7 @@ class Servo
 	);
 	void init(void);
 	void setFeedRate(float newFeedRate);
-	float setTargetPosition(float posDegree, float newFeedRate);
+	float setTargetPosition(float posDegree/*, float newFeedRate*/);
 	void step(void);
 };
 #endif

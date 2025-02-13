@@ -14,6 +14,7 @@ void Servo::init(void)
 	ledcAttachPin(pin, channel);
 	ledcSetup(channel, GLOBAL_PWM_FREQ, GLOBAL_PWM_RES);
 	setPosition(curDuty);
+	setFeedRate(DEFAULT_FEEDRATE);
 }
 void Servo::setPosition(uint16_t newDuty)
 {
@@ -23,10 +24,10 @@ void Servo::setFeedRate(float newFeedRate)
 {
 	stepValue = _DEGREE_TO_DUTY(newFeedRate * 0.001 * UPDATE_STEP);
 }
-float Servo::setTargetPosition(float newPosDegree, float newFeedRate)
+float Servo::setTargetPosition(float newPosDegree/*, float newFeedRate*/)
 {
 	uint16_t newDuty = _DEGREE_TO_DUTY(newPosDegree);
-	setFeedRate(newFeedRate);
+//	setFeedRate(newFeedRate);
 
 	if(newDuty > maxDuty)
 	{
