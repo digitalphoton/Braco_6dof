@@ -22,7 +22,10 @@ void Servo::setPosition(uint16_t newDuty)
 }
 void Servo::setFeedRate(float newFeedRate)
 {
-	stepValue = _DEGREE_TO_DUTY(newFeedRate * 0.001 * UPDATE_STEP);
+	// calcular quantos degraus por passo
+	float degreePerStep = newFeedRate * 0.001 * UPDATE_STEP;
+	// achar o valor para incrementar o duty cycle por passo
+	stepValue = (degreePerStep)*(0xffff)/(2400.0);
 }
 float Servo::setTargetPosition(float newPosDegree/*, float newFeedRate*/)
 {
@@ -45,21 +48,46 @@ float Servo::setTargetPosition(float newPosDegree/*, float newFeedRate*/)
 }
 void Servo::step(void)
 {
-	// Nenhum passo para fazer
-	if(stepCount == 0)
-	{
-		curDuty = targetDuty;
-	}
 	// stepCount é positivo quando estamos subindo e negativo quando descendo
-	else if(stepCount > 0)
+	if(stepCount > 0 && curDuty < maxDuty)
 	{
 		curDuty += stepValue;
 		stepCount--;
 	}
-	else
+	else if(stepCount < 0 && curDuty > minDuty)
 	{
 		curDuty -= stepValue;
 		stepCount++	;
 	}
+	// Nenhum passo para fazer
+	else
+	{
+		curDuty = targetDuty;
+		stepCount = 0;
+	}
 	setPosition(curDuty);
+}
+void Servo::move(bool direction)
+{
+	switch(direction)
+	{
+		default:
+		case true:
+		{
+			targetDuty = maxDuty;
+			stepCount = 0x7fff;
+			break;
+		}
+		case false:
+		{
+			targetDuty = minDuty;
+			stepCount = -0x7fff;
+			break;
+		}
+	}
+}
+void Servo::stop(void)
+{
+	stepCount = 0;
+	targetDuty = curDuty;
 }

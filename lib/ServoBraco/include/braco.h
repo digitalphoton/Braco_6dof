@@ -34,9 +34,9 @@ class Braco
   public:
 
   Servo rotacao{ROTACAO_PIN, ROTACAO_CH, -70.0, +70.0, 0.0};
-  Servo ombro{OMBRO_PIN, OMBRO_CH, -30.0, +70.0, 0.0};
+  Servo ombro{OMBRO_PIN, OMBRO_CH, -30.0, +70.0, 10.0};
   Servo cotovelo{COTOVELO_PIN, COTOVELO_CH, -70.0, +70.0, -70.0};
-  Servo pulsoFlexao{PULSOFLEXAO_PIN, PULSOFLEXAO_CH, -70.0, 30.0, 0.0};
+  Servo pulsoFlexao{PULSOFLEXAO_PIN, PULSOFLEXAO_CH, -70.0, 30.0, -70.0};
   Servo pulsoRotacao{PULSOROTACAO_PIN, PULSOROTACAO_CH, -70.0, +70.0, 0.0};
   Servo garra{GARRA_PIN, GARRA_CH, 0.0, +60.0, 0.0};
 
@@ -60,6 +60,7 @@ class Braco
 //  void setPulsoRotacao(float newPulsoRotacao, bool doUpdate = false);
 //  void setGarra(float newGarra, bool doUpdate = false);
 
+  void estop(void);
   void atuar(char comando, float argumento);
 };
 

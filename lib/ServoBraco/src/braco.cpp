@@ -193,6 +193,16 @@ void Braco::setGarra(float newGarra, bool doUpdate)
 }
 */
 
+void Braco::estop(void)
+{
+	rotacao.stop();
+	ombro.stop();
+	cotovelo.stop();
+	pulsoFlexao.stop();
+	pulsoRotacao.stop();
+	garra.stop();
+}
+
 // recebe um comando e um argumento, atua o servo respectivo
 void Braco::atuar(char comando, float argumento)
 {
@@ -237,6 +247,12 @@ void Braco::atuar(char comando, float argumento)
 			Serial.print("Posição da Garra definida para ");
 			Serial.print( garra.setTargetPosition(argumento) );
 			break;
+		case 'p':
+		case 'P':
+			Serial.print("PARADA DE EMERGÊNCIA");
+			estop();
+			break;
+
 	}
 	Serial.println();
 }
