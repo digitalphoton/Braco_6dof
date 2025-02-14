@@ -70,7 +70,7 @@ void Servo::step(void)
 void Servo::move(bool direction)
 {
 	// Mover para frente (positivo)
-	if(direction == true)
+	if(direction)
 	{
 		targetDuty = maxDuty;
 		stepCount = 0x7fff;
