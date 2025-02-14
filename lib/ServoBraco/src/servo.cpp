@@ -69,21 +69,17 @@ void Servo::step(void)
 }
 void Servo::move(bool direction)
 {
-	switch(direction)
+	// Mover para frente (positivo)
+	if(direction == true)
 	{
-		default:
-		case true:
-		{
-			targetDuty = maxDuty;
-			stepCount = 0x7fff;
-			break;
-		}
-		case false:
-		{
-			targetDuty = minDuty;
-			stepCount = -0x7fff;
-			break;
-		}
+		targetDuty = maxDuty;
+		stepCount = 0x7fff;
+	}
+	// mover para trás (negativo)
+	else
+	{
+		targetDuty = minDuty;
+		stepCount = -0x7fff;
 	}
 }
 void Servo::stop(void)
