@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <ServoBraco.h>
+#include <controle.h>
 
 #include <string>
 
@@ -11,7 +12,14 @@ typedef enum {STARTUP, STANDBY, RECEIVING, MOVING, UPDATING} Estados;
 Braco braco;
 Estados estado;
 
+unsigned long g_botaoLastPress = 0;
+bool g_botaoPressed = false;
+
+Botao botao{'A', 13};
+
 unsigned long g_tickLastUpdate = 0;
+
+void IRAM_ATTR botao_ISR(void);
 
 void setup()
 {
@@ -33,6 +41,8 @@ void setup()
 	}
 
 	braco.init();
+
+	botao.init(botao_ISR);
 
 	delay(2000);
 	Serial.println("Braço inicializado!");
@@ -113,5 +123,20 @@ void loop()
 			g_tickLastUpdate = tickAtual;
 			break;
 		}
+	}
+	if(g_botaoPressed)
+	{
+		Serial.println("Botao!");
+	}
+}
+
+void IRAM_ATTR botao_ISR(void)
+{
+	unsigned long now = millis();
+
+	if(now >= g_botaoLastPress + 50)
+	{
+		g_botaoPressed = (digitalRead(13)) ? false : true;
+		g_botaoLastPress = now;
 	}
 }
