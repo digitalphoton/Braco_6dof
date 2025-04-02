@@ -98,6 +98,13 @@ void loop()
 			}
 			break;
 		}
+		case UPDATING:
+		{
+			braco.update();
+			estado = STANDBY;
+			g_tickLastUpdate = tickAtual;
+			break;
+		}
 		case RECEIVING:
 		{
 			char receiveBuffer[10];
@@ -123,13 +130,6 @@ void loop()
 		{
 			Serial.println("Botao!");
 			estado = STANDBY;
-			break;
-		}
-		case UPDATING:
-		{
-			braco.update();
-			estado = STANDBY;
-			g_tickLastUpdate = tickAtual;
 			break;
 		}
 	}
