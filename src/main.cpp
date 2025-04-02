@@ -152,7 +152,7 @@ void IRAM_ATTR botao_ISR(void)
 	{
 		g_botaoPressed = (digitalRead(13)) ? false : true;
 		g_botaoLastPress = now;
-	}
 
-	estadoProximo = MANUAL_CONTROL;
+		estadoProximo = MANUAL_CONTROL;
+	}
 }
