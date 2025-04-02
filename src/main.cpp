@@ -105,6 +105,12 @@ void loop()
 			g_tickLastUpdate = tickAtual;
 			break;
 		}
+		case MANUAL_CONTROL:
+		{
+			Serial.println("Botao!");
+			estado = STANDBY;
+			break;
+		}
 		case RECEIVING:
 		{
 			char receiveBuffer[10];
@@ -123,12 +129,6 @@ void loop()
 			float argumento = atof(&receiveBuffer[1]);
 			braco.atuar(comando, argumento);
 
-			estado = STANDBY;
-			break;
-		}
-		case MANUAL_CONTROL:
-		{
-			Serial.println("Botao!");
 			estado = STANDBY;
 			break;
 		}
