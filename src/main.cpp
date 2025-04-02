@@ -10,7 +10,8 @@
 typedef enum {STARTUP, STANDBY, RECEIVING, MANUAL_CONTROL, UPDATING} Estados;
 
 Braco braco;
-Estados estado;
+Estados estadoAtual;
+Estados estadoProximo;
 
 unsigned long g_botaoLastPress = 0;
 bool g_botaoPressed = false;
@@ -23,7 +24,7 @@ void IRAM_ATTR botao_ISR(void);
 
 void setup()
 {
-	estado = STARTUP;
+	estadoAtual = STARTUP;
 
 	Serial.begin(115200);
 	while(!Serial);
@@ -48,7 +49,7 @@ void setup()
 	Serial.println("Braço inicializado!");
 	delay(2000);
 
-	estado = STANDBY;
+	estadoAtual = STANDBY;
 }
 
 void loop()
@@ -79,36 +80,44 @@ void loop()
 
 	unsigned long tickAtual = millis();
 
-	switch(estado)
+	estadoAtual = estadoProximo;
+	estadoProximo = STANDBY;
+
+	switch(estadoAtual)
 	{
 		default:
 		case STANDBY:
 		{
 			if(tickAtual >= g_tickLastUpdate + UPDATE_STEP)
 			{
-				estado = UPDATING;
-			}
-			else if(g_botaoPressed)
-			{
-				estado = MANUAL_CONTROL;
+				estadoProximo = UPDATING;
 			}
 			else if(Serial.available())
 			{
-				estado = RECEIVING;
+				estadoProximo = RECEIVING;
 			}
 			break;
 		}
 		case UPDATING:
 		{
 			braco.update();
-			estado = STANDBY;
+			estadoProximo = STANDBY;
 			g_tickLastUpdate = tickAtual;
 			break;
 		}
 		case MANUAL_CONTROL:
 		{
 			Serial.println("Botao!");
-			estado = STANDBY;
+			if(g_botaoPressed)
+			{
+				braco.rotacao.move(true);
+			}
+			else
+			{
+				braco.rotacao.stop();
+			}
+
+			estadoProximo = STANDBY;
 			break;
 		}
 		case RECEIVING:
@@ -129,7 +138,7 @@ void loop()
 			float argumento = atof(&receiveBuffer[1]);
 			braco.atuar(comando, argumento);
 
-			estado = STANDBY;
+			estadoProximo = STANDBY;
 			break;
 		}
 	}
@@ -144,4 +153,6 @@ void IRAM_ATTR botao_ISR(void)
 		g_botaoPressed = (digitalRead(13)) ? false : true;
 		g_botaoLastPress = now;
 	}
+
+	estadoProximo = MANUAL_CONTROL;
 }
