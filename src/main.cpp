@@ -7,7 +7,7 @@
 // Intervalo de tempo entre updates, em millisegundos
 #define UPDATE_STEP 20
 
-typedef enum {STARTUP, STANDBY, RECEIVING, MOVING, UPDATING} Estados;
+typedef enum {STARTUP, STANDBY, RECEIVING, MANUAL_CONTROL, UPDATING} Estados;
 
 Braco braco;
 Estados estado;
@@ -88,13 +88,16 @@ void loop()
 			{
 				estado = UPDATING;
 			}
-			if(Serial.available())
+			else if(g_botaoPressed)
+			{
+				estado = MANUAL_CONTROL;
+			}
+			else if(Serial.available())
 			{
 				estado = RECEIVING;
 			}
 			break;
 		}
-
 		case RECEIVING:
 		{
 			char receiveBuffer[10];
@@ -116,6 +119,12 @@ void loop()
 			estado = STANDBY;
 			break;
 		}
+		case MANUAL_CONTROL:
+		{
+			Serial.println("Botao!");
+			estado = STANDBY;
+			break;
+		}
 		case UPDATING:
 		{
 			braco.update();
@@ -123,10 +132,6 @@ void loop()
 			g_tickLastUpdate = tickAtual;
 			break;
 		}
-	}
-	if(g_botaoPressed)
-	{
-		Serial.println("Botao!");
 	}
 }
 
