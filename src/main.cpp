@@ -15,9 +15,11 @@ Estados estadoProximo;
 
 unsigned long g_botaoLastPress = 0;
 bool g_botaoPressed = false;
+bool g_pollingNeeded = false;
 
 Botao botao{'A', 13};
 
+unsigned long g_tickLastPoll = 0;
 unsigned long g_tickLastUpdate = 0;
 
 void IRAM_ATTR botao_ISR(void);
@@ -92,6 +94,10 @@ void loop()
 			{
 				estadoProximo = UPDATING;
 			}
+			else if(tickAtual >= g_tickLastPoll + 2 && g_pollingNeeded)
+			{
+				estadoProximo = MANUAL_CONTROL;
+			}
 			else if(Serial.available())
 			{
 				estadoProximo = RECEIVING;
@@ -107,16 +113,19 @@ void loop()
 		}
 		case MANUAL_CONTROL:
 		{
-			Serial.println("Botao!");
 			if(g_botaoPressed)
 			{
+				Serial.println("Botao apertado!");
 				braco.rotacao.move(true);
 			}
 			else
 			{
+				Serial.println("Botao solto!");
 				braco.rotacao.stop();
 			}
 
+			g_pollingNeeded = false;
+			g_tickLastPoll = tickAtual;
 			estadoProximo = STANDBY;
 			break;
 		}
@@ -152,6 +161,7 @@ void IRAM_ATTR botao_ISR(void)
 	{
 		g_botaoPressed = (digitalRead(13)) ? false : true;
 		g_botaoLastPress = now;
+		g_pollingNeeded = true;
 
 		estadoProximo = MANUAL_CONTROL;
 	}

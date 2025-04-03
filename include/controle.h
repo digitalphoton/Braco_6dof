@@ -13,6 +13,7 @@ class Botao {
 	public:
 
 	Botao(char newID, uint8_t newPin);
+
 	void init(void (*isr)());
 
 };
