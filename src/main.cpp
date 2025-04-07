@@ -13,9 +13,9 @@ Braco braco;
 Estados estadoAtual;
 Estados estadoProximo;
 
-unsigned long g_botaoLastPress = 0;
-bool g_botaoPressed = false;
-bool g_pollingNeeded = false;
+//unsigned long g_botaoLastPress = 0;
+//bool g_botaoPressed = false;
+//bool g_pollingNeeded = false;
 
 Botao botao{'A', 13};
 
@@ -94,7 +94,7 @@ void loop()
 			{
 				estadoProximo = UPDATING;
 			}
-			else if(tickAtual >= g_tickLastPoll + 2 && g_pollingNeeded)
+			else if(tickAtual >= g_tickLastPoll + 2 && botao.needsPolling())
 			{
 				estadoProximo = MANUAL_CONTROL;
 			}
@@ -113,7 +113,7 @@ void loop()
 		}
 		case MANUAL_CONTROL:
 		{
-			if(g_botaoPressed)
+			if(botao.getState())
 			{
 				Serial.println("Botao apertado!");
 				braco.rotacao.move(true);
@@ -124,8 +124,6 @@ void loop()
 				braco.rotacao.stop();
 			}
 
-			g_pollingNeeded = false;
-			g_tickLastPoll = tickAtual;
 			estadoProximo = STANDBY;
 			break;
 		}
@@ -157,11 +155,10 @@ void IRAM_ATTR botao_ISR(void)
 {
 	unsigned long now = millis();
 
-	if(now >= g_botaoLastPress + 50)
+	if(now >= botao.getLastPressed() + 50)
 	{
-		g_botaoPressed = (digitalRead(13)) ? false : true;
-		g_botaoLastPress = now;
-		g_pollingNeeded = true;
+		bool newState = (digitalRead(13)) ? false : true;
+		botao.setState(newState);
 
 		estadoProximo = MANUAL_CONTROL;
 	}
