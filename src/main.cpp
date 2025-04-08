@@ -94,7 +94,7 @@ void loop()
 			{
 				estadoProximo = UPDATING;
 			}
-			else if(tickAtual >= g_tickLastPoll + 2 && botao.needsPolling())
+			else if(tickAtual >= g_tickLastPoll + 2)
 			{
 				estadoProximo = MANUAL_CONTROL;
 			}
