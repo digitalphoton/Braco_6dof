@@ -18,6 +18,7 @@ Estados estadoProximo;
 //bool g_pollingNeeded = false;
 
 Botao botao{'A', 13};
+Potenciometro potenciometro{'Y', 34};
 
 unsigned long g_tickLastPoll = 0;
 unsigned long g_tickLastUpdate = 0;
@@ -46,6 +47,7 @@ void setup()
 	braco.init();
 
 	botao.init(botao_ISR);
+	potenciometro.init();
 
 	delay(2000);
 	Serial.println("Braço inicializado!");
@@ -113,6 +115,10 @@ void loop()
 		}
 		case MANUAL_CONTROL:
 		{
+			Serial.print("Valor Potenciometro = ");
+			Serial.print(potenciometro.getValue());
+			Serial.print("; ");
+
 			if(botao.getState())
 			{
 				Serial.println("Botao apertado!");

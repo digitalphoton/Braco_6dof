@@ -34,10 +34,10 @@ class Potenciometro {
 
 	public:
 
-	Potenciometro(char newID, uint8_t newPin, int16_t value);
+	Potenciometro(char newID, uint8_t newPin);
 
-	void init();
-	void getValue();
+	void init(void);
+	uint16_t getValue(void);
 
 };
 
