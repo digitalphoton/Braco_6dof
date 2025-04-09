@@ -7,7 +7,7 @@
 // Intervalo de tempo entre updates, em millisegundos
 #define UPDATE_STEP 20
 
-typedef enum {STARTUP, STANDBY, RECEIVING, MANUAL_CONTROL, UPDATING} Estados;
+typedef enum {STARTUP, STANDBY, RECEIVING, MANUAL_CONTROL, UPDATING, LOGGING} Estados;
 
 Braco braco;
 Estados estadoAtual;
@@ -22,12 +22,14 @@ Potenciometro potenciometro{'Y', 34};
 
 unsigned long g_tickLastPoll = 0;
 unsigned long g_tickLastUpdate = 0;
+unsigned long g_tickLastLog = 0;
 
 void IRAM_ATTR botao_ISR(void);
 
 void setup()
 {
 	estadoAtual = STARTUP;
+	estadoProximo = STANDBY;
 
 	Serial.begin(115200);
 	while(!Serial);
@@ -52,8 +54,6 @@ void setup()
 	delay(2000);
 	Serial.println("Braço inicializado!");
 	delay(2000);
-
-	estadoAtual = STANDBY;
 }
 
 void loop()
@@ -83,9 +83,7 @@ void loop()
 	braco.setRotacao(0.0, true);*/
 
 	unsigned long tickAtual = millis();
-
 	estadoAtual = estadoProximo;
-	estadoProximo = STANDBY;
 
 	switch(estadoAtual)
 	{
@@ -96,9 +94,13 @@ void loop()
 			{
 				estadoProximo = UPDATING;
 			}
-			else if(tickAtual >= g_tickLastPoll + 2)
+			else if(tickAtual >= g_tickLastPoll + 3)
 			{
 				estadoProximo = MANUAL_CONTROL;
+			}
+			else if(tickAtual >= g_tickLastLog + 1000)
+			{
+				estadoProximo = LOGGING;
 			}
 			else if(Serial.available())
 			{
@@ -109,27 +111,23 @@ void loop()
 		case UPDATING:
 		{
 			braco.update();
-			estadoProximo = STANDBY;
 			g_tickLastUpdate = tickAtual;
+
+			estadoProximo = STANDBY;
 			break;
 		}
 		case MANUAL_CONTROL:
 		{
-			Serial.print("Valor Potenciometro = ");
-			Serial.print(potenciometro.getValue());
-			Serial.print("; ");
-
 			if(botao.getState())
 			{
-				Serial.println("Botao apertado!");
 				braco.rotacao.move(true);
 			}
 			else
 			{
-				Serial.println("Botao solto!");
 				braco.rotacao.stop();
 			}
 
+			g_tickLastPoll = tickAtual;
 			estadoProximo = STANDBY;
 			break;
 		}
@@ -151,6 +149,18 @@ void loop()
 			float argumento = atof(&receiveBuffer[1]);
 			braco.atuar(comando, argumento);
 
+			estadoProximo = STANDBY;
+			break;
+		}
+		case LOGGING:
+		{
+			Serial.print("Valor Potenciometro = ");
+			Serial.print(potenciometro.getValue());
+			Serial.print("; Estado Botao = ");
+			Serial.print(botao.getState());
+			Serial.println();
+
+			g_tickLastLog = tickAtual;
 			estadoProximo = STANDBY;
 			break;
 		}
