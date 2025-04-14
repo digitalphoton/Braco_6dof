@@ -2,21 +2,12 @@
 #include <ServoBraco.h>
 #include <controle.h>
 
-#include <string>
-
-// Intervalo de tempo entre updates, em millisegundos
-#define UPDATE_STEP 20
-
 typedef enum {STARTUP, STANDBY, RECEIVING, MANUAL_CONTROL, UPDATING, LOGGING} Estados;
 
 Braco braco;
 Controle controle;
 Estados estadoAtual;
 Estados estadoProximo;
-
-//unsigned long g_botaoLastPress = 0;
-//bool g_botaoPressed = false;
-//bool g_pollingNeeded = false;
 
 unsigned long g_tickLastPoll = 0;
 unsigned long g_tickLastUpdate = 0;
@@ -52,30 +43,6 @@ void setup()
 
 void loop()
 {
-	/*braco.setRotacao(-70.0, true);
-	braco.setPulsoFlexao(-70.0, true);
-	braco.setGarra(70.0, true);
-	braco.setPulsoFlexao(0.0, true);
-	braco.setRotacao(0.0, true);
-
-	braco.setRotacao(70.0, true);
-	braco.setPulsoFlexao(-70.0, true);
-	braco.setGarra(0.0, true);
-	braco.setPulsoFlexao(0.0, true);
-	braco.setRotacao(0.0, true);
-
-	braco.setRotacao(70.0, true);
-	braco.setPulsoFlexao(-70.0, true);
-	braco.setGarra(70.0, true);
-	braco.setPulsoFlexao(0.0, true);
-	braco.setRotacao(0.0, true);
-
-	braco.setRotacao(-70.0, true);
-	braco.setPulsoFlexao(-70.0, true);
-	braco.setGarra(0.0, true);
-	braco.setPulsoFlexao(0.0, true);
-	braco.setRotacao(0.0, true);*/
-
 	unsigned long tickAtual = millis();
 	estadoAtual = estadoProximo;
 

@@ -1,7 +1,6 @@
 #include "servo.h"
 
-Servo::Servo( uint8_t newPin, uint8_t newChannel, float newMinPosDegree, float newMaxPosDegree, float initPosDegree)
-{
+Servo::Servo( uint8_t newPin, uint8_t newChannel, float newMinPosDegree, float newMaxPosDegree, float initPosDegree) {
 	channel = newChannel;
 	pin = newPin;
 	minDuty = _DEGREE_TO_DUTY(newMinPosDegree);
@@ -9,28 +8,23 @@ Servo::Servo( uint8_t newPin, uint8_t newChannel, float newMinPosDegree, float n
 	curDuty = _DEGREE_TO_DUTY(initPosDegree);
 	targetDuty = curDuty;
 }
-void Servo::init(void)
-{
+void Servo::init(void) {
 	ledcAttachPin(pin, channel);
 	ledcSetup(channel, GLOBAL_PWM_FREQ, GLOBAL_PWM_RES);
 	setPosition(curDuty);
 	setFeedRate(DEFAULT_FEEDRATE);
 }
-void Servo::setPosition(uint16_t newDuty)
-{
+void Servo::setPosition(uint16_t newDuty) {
 	ledcWrite(channel, newDuty);
 }
-void Servo::setFeedRate(float newFeedRate)
-{
+void Servo::setFeedRate(float newFeedRate) {
 	// calcular quantos degraus por passo
 	float degreePerStep = newFeedRate * 0.001 * UPDATE_STEP;
 	// achar o valor para incrementar o duty cycle por passo
 	stepValue = (degreePerStep)*(0xffff)/(2400.0);
 }
-float Servo::setTargetPosition(float newPosDegree/*, float newFeedRate*/)
-{
+float Servo::setTargetPosition(float newPosDegree/*, float newFeedRate*/) {
 	uint16_t newDuty = _DEGREE_TO_DUTY(newPosDegree);
-//	setFeedRate(newFeedRate);
 
 	if(newDuty > maxDuty)
 	{
@@ -46,8 +40,7 @@ float Servo::setTargetPosition(float newPosDegree/*, float newFeedRate*/)
 
 	return _DUTY_TO_DEGREE(targetDuty);
 }
-void Servo::step(void)
-{
+void Servo::step(void) {
 	// stepCount é positivo quando estamos subindo e negativo quando descendo
 	if(stepCount > 0 && curDuty < maxDuty)
 	{
@@ -67,8 +60,7 @@ void Servo::step(void)
 	}
 	setPosition(curDuty);
 }
-void Servo::move(bool direction)
-{
+void Servo::move(bool direction) {
 	// Mover para frente (positivo)
 	if(direction)
 	{
@@ -82,8 +74,7 @@ void Servo::move(bool direction)
 		stepCount = -0x7fff;
 	}
 }
-void Servo::stop(void)
-{
+void Servo::stop(void) {
 	stepCount = 0;
 	targetDuty = curDuty;
 }

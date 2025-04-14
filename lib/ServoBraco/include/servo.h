@@ -10,27 +10,15 @@
 #define GLOBAL_PWM_FREQ 50
 
 #define UPDATE_STEP 20
-#define TOLERANCE 0.1
 #define DEFAULT_FEEDRATE 60.0
 
-class Servo
-{
+class Servo {
 	uint8_t channel;
 	uint8_t pin;
-
-//	float minPosDegree;
-//	float maxPosDegree;
-//
-//	float curPosDegree;
-//	float targetPosDegree;
-//	float stepValue;
-
 	uint16_t minDuty;
 	uint16_t maxDuty;
-
 	uint16_t curDuty;
 	uint16_t targetDuty;
-
 	int16_t stepValue;
 	int16_t stepCount;
 

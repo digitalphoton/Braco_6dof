@@ -9,22 +9,14 @@ class Botao {
 	char id;
 	uint8_t pin;
 	bool state;
-	unsigned long lastPressed;
-	bool pollingNeeded;
-	unsigned long lastPolled;
 
 	public:
 
 	Botao(char newID, uint8_t newPin);
 
-	//void init(void (*isr)());
 	void init();
 	void update();
-
-	//void setState(bool newState);
 	bool getState(void);
-	bool needsPolling(void);
-	unsigned long getLastPressed(void);
 };
 class Potenciometro {
 
@@ -36,8 +28,6 @@ class Potenciometro {
 	float offset;
 	float deadzone;
 	float sensitivity;
-
-	unsigned long lastPolled;
 
 	public:
 

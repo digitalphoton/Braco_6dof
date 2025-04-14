@@ -1,29 +1,10 @@
 #include <controle.h>
 
 Botao::Botao(char newID, uint8_t newPin) {
-
 	id = newID;
 	pin = newPin;
 	state = false;
-	lastPressed = 0;
-	pollingNeeded = false;
-
 }
-/*
-void Botao::init( void (*isr)() ) {
-
-	pinMode(pin, INPUT_PULLUP);
-	attachInterrupt(digitalPinToInterrupt(pin), isr, CHANGE);
-
-}
-void Botao::setState(bool newState) {
-
-	state = newState;
-	lastPressed = millis();
-	pollingNeeded = true;
-
-}
-*/
 void Botao::init(void) {
 	pinMode(pin, INPUT_PULLUP);
 }
@@ -31,38 +12,19 @@ void Botao::update(void) {
 	state = (digitalRead(pin)) ? false : true;
 }
 bool Botao::getState(void) {
-
-	pollingNeeded = false;
-	lastPolled = millis();
 	return state;
-
-}
-bool Botao::needsPolling(void) {
-
-	return pollingNeeded;
-
-}
-unsigned long Botao::getLastPressed(void) {
-
-	return lastPressed;
-
 }
 
-Potenciometro::Potenciometro(char newID, uint8_t newPin)
-{
+Potenciometro::Potenciometro(char newID, uint8_t newPin) {
 	id = newID;
 	pin = newPin;
 	value = 0;
 	offset = 0.045;
 	deadzone = 0.1;
-	lastPolled = 0;
 }
-
-void Potenciometro::init(void)
-{
+void Potenciometro::init(void) {
 	pinMode(pin, INPUT);
 }
-
 void Potenciometro::update(void) {
 	float valueRead = ((float)analogRead(pin) - 2047.5) / 2047.5 + offset;
 
@@ -75,11 +37,10 @@ void Potenciometro::update(void) {
 		value = 0.0;
 	}
 }
-
-float Potenciometro::getValue(void)
-{
+float Potenciometro::getValue(void) {
 	return value;
 }
+
 void Controle::init(void) {
 	axisX.init();
 	axisY.init();
