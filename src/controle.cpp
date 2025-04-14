@@ -9,6 +9,7 @@ Botao::Botao(char newID, uint8_t newPin) {
 	pollingNeeded = false;
 
 }
+/*
 void Botao::init( void (*isr)() ) {
 
 	pinMode(pin, INPUT_PULLUP);
@@ -21,6 +22,13 @@ void Botao::setState(bool newState) {
 	lastPressed = millis();
 	pollingNeeded = true;
 
+}
+*/
+void Botao::init(void) {
+	pinMode(pin, INPUT_PULLUP);
+}
+void Botao::update(void) {
+	state = (digitalRead(pin)) ? false : true;
 }
 bool Botao::getState(void) {
 
@@ -55,22 +63,20 @@ void Potenciometro::init(void)
 	pinMode(pin, INPUT);
 }
 
+void Potenciometro::update(void) {
+	float valueRead = ((float)analogRead(pin) - 2047.5) / 2047.5 + offset;
+
+	if(valueRead > deadzone || valueRead < -deadzone)
+	{
+		value = valueRead;
+	}
+	else
+	{
+		value = 0.0;
+	}
+}
+
 float Potenciometro::getValue(void)
 {
-	unsigned long tickAtual = millis();
-	if(tickAtual >= lastPolled + 2)
-	{
-		float valueRead = ((float)analogRead(pin) - 2047.5) / 2047.5 + offset;
-
-		if(valueRead > deadzone || valueRead < -deadzone)
-		{
-			value = valueRead;
-		}
-		else
-		{
-			value = 0.0;
-		}
-		lastPolled = tickAtual;
-	}
 	return value;
 }

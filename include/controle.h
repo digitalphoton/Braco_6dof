@@ -17,8 +17,11 @@ class Botao {
 
 	Botao(char newID, uint8_t newPin);
 
-	void init(void (*isr)());
-	void setState(bool newState);
+	//void init(void (*isr)());
+	void init();
+	void update();
+
+	//void setState(bool newState);
 	bool getState(void);
 	bool needsPolling(void);
 	unsigned long getLastPressed(void);
@@ -41,6 +44,7 @@ class Potenciometro {
 	Potenciometro(char newID, uint8_t newPin);
 
 	void init(void);
+	void update(void);
 	float getValue(void);
 
 };
@@ -49,10 +53,13 @@ class Controle {
 
 	private:
 
+	Potenciometro axisX{'X', 33};
+	Potenciometro axisY{'Y', 34};
 
 	public:
 
 	void init(void);
+	void update(void);
 
 };
 

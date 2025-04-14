@@ -48,7 +48,7 @@ void setup()
 
 	braco.init();
 
-	botao.init(botao_ISR);
+	botao.init();
 	potenciometro.init();
 
 	delay(2000);
@@ -118,6 +118,9 @@ void loop()
 		}
 		case MANUAL_CONTROL:
 		{
+			potenciometro.update();
+			botao.update();
+
 			if(potenciometro.getValue() > 0.0)
 			{
 				braco.rotacao.move(true);
@@ -168,18 +171,5 @@ void loop()
 			estadoProximo = STANDBY;
 			break;
 		}
-	}
-}
-
-void IRAM_ATTR botao_ISR(void)
-{
-	unsigned long now = millis();
-
-	if(now >= botao.getLastPressed() + 50)
-	{
-		bool newState = (digitalRead(13)) ? false : true;
-		botao.setState(newState);
-
-		estadoProximo = MANUAL_CONTROL;
 	}
 }
