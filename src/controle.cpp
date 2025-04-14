@@ -45,6 +45,9 @@ Potenciometro::Potenciometro(char newID, uint8_t newPin)
 	id = newID;
 	pin = newPin;
 	value = 0;
+	offset = 0.045;
+	deadzone = 0.1;
+	lastPolled = 0;
 }
 
 void Potenciometro::init(void)
@@ -54,15 +57,20 @@ void Potenciometro::init(void)
 
 float Potenciometro::getValue(void)
 {
-	float valueRead = ((float)analogRead(pin) - 2047.5) / 2047.5 + offset;
+	unsigned long tickAtual = millis();
+	if(tickAtual >= lastPolled + 2)
+	{
+		float valueRead = ((float)analogRead(pin) - 2047.5) / 2047.5 + offset;
 
-	if(valueRead > deadzone || valueRead < -deadzone)
-	{
-		value = valueRead;
-	}
-	else
-	{
-		value = 0.0;
+		if(valueRead > deadzone || valueRead < -deadzone)
+		{
+			value = valueRead;
+		}
+		else
+		{
+			value = 0.0;
+		}
+		lastPolled = tickAtual;
 	}
 	return value;
 }

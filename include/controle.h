@@ -30,9 +30,11 @@ class Potenciometro {
 	char id;
 	uint8_t pin;
 	float value;
-	float offset = 0.045;
-	float deadzone = 0.1;
+	float offset;
+	float deadzone;
 	float sensitivity;
+
+	unsigned long lastPolled;
 
 	public:
 
