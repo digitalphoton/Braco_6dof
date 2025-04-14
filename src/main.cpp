@@ -12,9 +12,9 @@ Estados estadoProximo;
 unsigned long g_tickLastPoll = 0;
 unsigned long g_tickLastUpdate = 0;
 unsigned long g_tickLastLog = 0;
+unsigned long g_counter;
 
-void setup()
-{
+void setup() {
 	estadoAtual = STARTUP;
 	estadoProximo = STANDBY;
 
@@ -28,8 +28,7 @@ void setup()
 
 	// Esperar entrada, e depois descartar os bytes recebidos
 	while(!Serial.available());
-	while(Serial.available() > 0)
-	{
+	while(Serial.available() > 0) {
 		Serial.read();
 	}
 
@@ -41,21 +40,19 @@ void setup()
 	delay(2000);
 }
 
-void loop()
-{
+void loop() {
 	unsigned long tickAtual = millis();
+	char receiveBuffer[10];
 	estadoAtual = estadoProximo;
 
-	switch(estadoAtual)
-	{
+	switch(estadoAtual) {
 		default:
 		case STANDBY:
-		{
 			if(tickAtual >= g_tickLastUpdate + UPDATE_STEP)
 			{
 				estadoProximo = UPDATING;
 			}
-			else if(tickAtual >= g_tickLastPoll + 3)
+			else if(tickAtual > g_tickLastPoll)
 			{
 				estadoProximo = MANUAL_CONTROL;
 			}
@@ -68,17 +65,13 @@ void loop()
 				estadoProximo = RECEIVING;
 			}
 			break;
-		}
 		case UPDATING:
-		{
 			braco.update();
 			g_tickLastUpdate = tickAtual;
 
 			estadoProximo = STANDBY;
 			break;
-		}
 		case MANUAL_CONTROL:
-		{
 			controle.update();
 
 			if(controle.axisY.getValue() > 0.0)
@@ -97,10 +90,7 @@ void loop()
 			g_tickLastPoll = tickAtual;
 			estadoProximo = STANDBY;
 			break;
-		}
 		case RECEIVING:
-		{
-			char receiveBuffer[10];
 			for(uint8_t i; i < 10; i++)
 			{
 				receiveBuffer[i] = Serial.read();
@@ -112,24 +102,23 @@ void loop()
 			}
 			// primeiro caractere vai para comando, o resto da string é
 			// convertida para número e vai para argumento
-			char comando = receiveBuffer[0];
-			float argumento = atof(&receiveBuffer[1]);
-			braco.atuar(comando, argumento);
+			braco.atuar(receiveBuffer[0], atof(&receiveBuffer[1]));
 
 			estadoProximo = STANDBY;
 			break;
-		}
 		case LOGGING:
-		{
 			Serial.print("Valor Potenciometro = ");
 			Serial.print(controle.axisY.getValue());
 			Serial.print("; Estado Botao = ");
 			Serial.print(controle.botaoA.getState());
+			Serial.print("; ciclos por segundo = ");
+			Serial.print(g_counter);
 			Serial.println();
 
+			g_counter = 0;
 			g_tickLastLog = tickAtual;
 			estadoProximo = STANDBY;
 			break;
-		}
 	}
+	g_counter++;
 }
