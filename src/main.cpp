@@ -118,9 +118,13 @@ void loop()
 		}
 		case MANUAL_CONTROL:
 		{
-			if(botao.getState())
+			if(potenciometro.getValue() > 0.0)
 			{
 				braco.rotacao.move(true);
+			}
+			else if(potenciometro.getValue() < 0.0)
+			{
+				braco.rotacao.move(false);
 			}
 			else
 			{

@@ -23,21 +23,23 @@ class Botao {
 	bool needsPolling(void);
 	unsigned long getLastPressed(void);
 };
-
 class Potenciometro {
 
 	private:
 
 	char id;
 	uint8_t pin;
-	int16_t value;
+	float value;
+	float offset = 0.045;
+	float deadzone = 0.1;
+	float sensitivity;
 
 	public:
 
 	Potenciometro(char newID, uint8_t newPin);
 
 	void init(void);
-	uint16_t getValue(void);
+	float getValue(void);
 
 };
 

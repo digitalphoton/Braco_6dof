@@ -52,8 +52,17 @@ void Potenciometro::init(void)
 	pinMode(pin, INPUT);
 }
 
-uint16_t Potenciometro::getValue(void)
+float Potenciometro::getValue(void)
 {
-	value = analogRead(pin);
+	float valueRead = ((float)analogRead(pin) - 2047.5) / 2047.5 + offset;
+
+	if(valueRead > deadzone || valueRead < -deadzone)
+	{
+		value = valueRead;
+	}
+	else
+	{
+		value = 0.0;
+	}
 	return value;
 }
