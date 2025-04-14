@@ -53,10 +53,17 @@ class Controle {
 
 	private:
 
-	Potenciometro axisX{'X', 33};
-	Potenciometro axisY{'Y', 34};
 
 	public:
+
+	Potenciometro axisX{'X', 33};
+	Potenciometro axisY{'Y', 34};
+	Botao botaoK{'K', 35};
+
+	Botao botaoA{'A', 13};
+	Botao botaoB{'A', 14};
+	Botao botaoC{'A', 15};
+	Botao botaoD{'A', 16};
 
 	void init(void);
 	void update(void);

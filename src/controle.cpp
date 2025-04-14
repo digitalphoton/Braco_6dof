@@ -80,3 +80,23 @@ float Potenciometro::getValue(void)
 {
 	return value;
 }
+void Controle::init(void) {
+	axisX.init();
+	axisY.init();
+	botaoK.init();
+
+	botaoA.init();
+	botaoB.init();
+	botaoC.init();
+	botaoD.init();
+}
+void Controle::update(void) {
+	axisX.update();
+	axisY.update();
+	botaoK.update();
+
+	botaoA.update();
+	botaoB.update();
+	botaoC.update();
+	botaoD.update();
+}

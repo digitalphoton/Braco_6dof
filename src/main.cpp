@@ -10,6 +10,7 @@
 typedef enum {STARTUP, STANDBY, RECEIVING, MANUAL_CONTROL, UPDATING, LOGGING} Estados;
 
 Braco braco;
+Controle controle;
 Estados estadoAtual;
 Estados estadoProximo;
 
@@ -17,14 +18,9 @@ Estados estadoProximo;
 //bool g_botaoPressed = false;
 //bool g_pollingNeeded = false;
 
-Botao botao{'A', 13};
-Potenciometro potenciometro{'Y', 34};
-
 unsigned long g_tickLastPoll = 0;
 unsigned long g_tickLastUpdate = 0;
 unsigned long g_tickLastLog = 0;
-
-void IRAM_ATTR botao_ISR(void);
 
 void setup()
 {
@@ -47,9 +43,7 @@ void setup()
 	}
 
 	braco.init();
-
-	botao.init();
-	potenciometro.init();
+	controle.init();
 
 	delay(2000);
 	Serial.println("Braço inicializado!");
@@ -118,14 +112,13 @@ void loop()
 		}
 		case MANUAL_CONTROL:
 		{
-			potenciometro.update();
-			botao.update();
+			controle.update();
 
-			if(potenciometro.getValue() > 0.0)
+			if(controle.axisY.getValue() > 0.0)
 			{
 				braco.rotacao.move(true);
 			}
-			else if(potenciometro.getValue() < 0.0)
+			else if(controle.axisY.getValue() < 0.0)
 			{
 				braco.rotacao.move(false);
 			}
@@ -162,9 +155,9 @@ void loop()
 		case LOGGING:
 		{
 			Serial.print("Valor Potenciometro = ");
-			Serial.print(potenciometro.getValue());
+			Serial.print(controle.axisY.getValue());
 			Serial.print("; Estado Botao = ");
-			Serial.print(botao.getState());
+			Serial.print(controle.botaoA.getState());
 			Serial.println();
 
 			g_tickLastLog = tickAtual;
