@@ -60,21 +60,23 @@ void Servo::step(void) {
 	}
 	setPosition(curDuty);
 }
-void Servo::move(bool direction) {
-	// Mover para frente (positivo)
-	if(direction)
-	{
-		targetDuty = maxDuty;
-		stepCount = 0x7fff;
-	}
-	// mover para trás (negativo)
-	else
-	{
-		targetDuty = minDuty;
-		stepCount = -0x7fff;
+void Servo::move(ServoDirecao direction) {
+	switch(direction) {
+		default:
+		case STOP:
+			stepCount = 0;
+			targetDuty = curDuty;
+			break;
+		case FORWARD:
+			targetDuty = maxDuty;
+			stepCount = 0x7fff;
+			break;
+		case BACKWARD:
+			targetDuty = minDuty;
+			stepCount = -0x7fff;
+			break;
 	}
 }
 void Servo::stop(void) {
-	stepCount = 0;
-	targetDuty = curDuty;
+	move(STOP);
 }

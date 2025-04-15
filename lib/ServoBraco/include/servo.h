@@ -12,6 +12,8 @@
 #define UPDATE_STEP 20
 #define DEFAULT_FEEDRATE 60.0
 
+typedef enum { STOP, FORWARD, BACKWARD } ServoDirecao;
+
 class Servo {
 	uint8_t channel;
 	uint8_t pin;
@@ -38,7 +40,7 @@ class Servo {
 	float setTargetPosition(float posDegree/*, float newFeedRate*/);
 	void step(void);
 
-	void move(bool direction);
+	void move(ServoDirecao direction);
 	void stop(void);
 };
 #endif
