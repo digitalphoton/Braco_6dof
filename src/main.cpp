@@ -71,25 +71,28 @@ void loop() {
 
 			estadoProximo = STANDBY;
 			break;
-		case MANUAL_CONTROL:
+		case MANUAL_CONTROL: {
 			controle.update();
 
-			if(controle.axisY.getValue() > 0.0)
+			switch(controle.getModoAtual())
 			{
-				braco.rotacao.move(true);
-			}
-			else if(controle.axisY.getValue() < 0.0)
-			{
-				braco.rotacao.move(false);
-			}
-			else
-			{
-				braco.rotacao.stop();
+				default:
+				case ROTEXT: {
+					braco.rotacao.move(_VALUE_TO_DIRECTION(controle.axisX.getValue()));
+					braco.ombro.move(_VALUE_TO_DIRECTION(controle.axisY.getValue()));
+					break;
+				}
+				case PULSO: {
+					braco.pulsoRotacao.move(_VALUE_TO_DIRECTION(controle.axisX.getValue()));
+					braco.pulsoFlexao.move(_VALUE_TO_DIRECTION(controle.axisY.getValue()));
+					break;
+				}
 			}
 
 			g_tickLastPoll = tickAtual;
 			estadoProximo = STANDBY;
 			break;
+		}
 		case RECEIVING:
 			for(uint8_t i; i < 10; i++)
 			{
@@ -107,10 +110,12 @@ void loop() {
 			estadoProximo = STANDBY;
 			break;
 		case LOGGING:
-			Serial.print("Valor Potenciometro = ");
+			Serial.print("Eixo X = ");
+			Serial.print(controle.axisX.getValue());
+			Serial.print("; Eixo Y = ");
 			Serial.print(controle.axisY.getValue());
 			Serial.print("; Estado Botao = ");
-			Serial.print(controle.botaoA.getState());
+			Serial.print(controle.botaoK.getState());
 			Serial.print("; ciclos por segundo = ");
 			Serial.print(g_counter);
 			Serial.println();
