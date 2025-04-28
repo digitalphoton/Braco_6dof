@@ -78,13 +78,19 @@ void loop() {
 			{
 				default:
 				case ROTEXT: {
-					braco.rotacao.move(_VALUE_TO_DIRECTION(controle.axisX.getValue()));
+					braco.rotacao.move(_VALUE_TO_DIRECTION(-controle.axisX.getValue()));
 					braco.ombro.move(_VALUE_TO_DIRECTION(controle.axisY.getValue()));
+					braco.cotovelo.move(_VALUE_TO_DIRECTION(-controle.axisY.getValue()));
+					braco.pulsoRotacao.stop();
+					braco.pulsoFlexao.stop();
 					break;
 				}
 				case PULSO: {
+					braco.rotacao.stop();
+					braco.ombro.stop();
+					braco.cotovelo.stop();
 					braco.pulsoRotacao.move(_VALUE_TO_DIRECTION(controle.axisX.getValue()));
-					braco.pulsoFlexao.move(_VALUE_TO_DIRECTION(controle.axisY.getValue()));
+					braco.pulsoFlexao.move(_VALUE_TO_DIRECTION(-controle.axisY.getValue()));
 					break;
 				}
 			}
