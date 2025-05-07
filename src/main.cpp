@@ -74,24 +74,39 @@ void loop() {
 		case MANUAL_CONTROL: {
 			controle.update();
 
-			switch(controle.getModoAtual())
-			{
-				default:
-				case ROTEXT: {
-					braco.rotacao.move(_VALUE_TO_DIRECTION(-controle.axisX.getValue()));
-					braco.ombro.move(_VALUE_TO_DIRECTION(controle.axisY.getValue()));
-					braco.cotovelo.move(_VALUE_TO_DIRECTION(-controle.axisY.getValue()));
-					braco.pulsoRotacao.stop();
-					braco.pulsoFlexao.stop();
-					break;
+			if(controle.botaoE.isRisingEdge()) {
+				controle.flipAtivoState();
+			}
+			if(controle.getAtivoState()) {
+				switch(controle.getModoAtual())
+				{
+					default:
+					case ROTEXT: {
+						braco.rotacao.move(_VALUE_TO_DIRECTION(-controle.axisX.getValue()));
+						braco.ombro.move(_VALUE_TO_DIRECTION(controle.axisY.getValue()));
+						braco.cotovelo.move(_VALUE_TO_DIRECTION(-controle.axisY.getValue()));
+						braco.pulsoRotacao.stop();
+						braco.pulsoFlexao.stop();
+						break;
+					}
+					case PULSO: {
+						braco.rotacao.stop();
+						braco.ombro.stop();
+						braco.cotovelo.stop();
+						braco.pulsoRotacao.move(_VALUE_TO_DIRECTION(controle.axisX.getValue()));
+						braco.pulsoFlexao.move(_VALUE_TO_DIRECTION(-controle.axisY.getValue()));
+						break;
+					}
 				}
-				case PULSO: {
-					braco.rotacao.stop();
-					braco.ombro.stop();
-					braco.cotovelo.stop();
-					braco.pulsoRotacao.move(_VALUE_TO_DIRECTION(controle.axisX.getValue()));
-					braco.pulsoFlexao.move(_VALUE_TO_DIRECTION(-controle.axisY.getValue()));
-					break;
+
+				if (controle.botaoA.getState()) {
+					braco.garra.move(FORWARD);
+				}
+				else if (controle.botaoC.getState()) {
+					braco.garra.move(BACKWARD);
+				}
+				else {
+					braco.garra.stop();
 				}
 			}
 
@@ -116,12 +131,10 @@ void loop() {
 			estadoProximo = STANDBY;
 			break;
 		case LOGGING:
-			Serial.print("Eixo X = ");
-			Serial.print(controle.axisX.getValue());
-			Serial.print("; Eixo Y = ");
-			Serial.print(controle.axisY.getValue());
-			Serial.print("; Estado Botao = ");
-			Serial.print(controle.botaoK.getState());
+			Serial.print("Controle Modo = ");
+			Serial.print(controle.getModoAtual());
+			Serial.print("; Controle Ativo = ");
+			Serial.print(controle.getAtivoState());
 			Serial.print("; ciclos por segundo = ");
 			Serial.print(g_counter);
 			Serial.println();

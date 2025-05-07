@@ -51,6 +51,7 @@ class Controle {
 
 	private:
 
+	bool isAtivo = false;
 	ControleModos modoAtual;
 
 	public:
@@ -66,9 +67,14 @@ class Controle {
 	Botao botaoC{'C', 27};
 	Botao botaoD{'D', 14};
 
+	Botao botaoE{'E', 26};
+	Botao botaoF{'F', 26};
+
 	void init(void);
 	void update(void);
 	ControleModos getModoAtual(void);
+	bool getAtivoState(void);
+	void flipAtivoState(void);
 };
 
 #endif

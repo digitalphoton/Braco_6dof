@@ -62,6 +62,9 @@ void Controle::init(void) {
 	botaoB.init();
 	botaoC.init();
 	botaoD.init();
+
+	botaoE.init();
+	botaoF.init();
 }
 void Controle::update(void) {
 	axisX.update();
@@ -85,7 +88,16 @@ void Controle::update(void) {
 	botaoB.update();
 	botaoC.update();
 	botaoD.update();
+
+	botaoE.update();
+	botaoF.update();
 }
 ControleModos Controle::getModoAtual(void) {
 	return modoAtual;
+}
+bool Controle::getAtivoState(void) {
+	return isAtivo;
+}
+void Controle::flipAtivoState(void) {
+	isAtivo = !isAtivo;
 }

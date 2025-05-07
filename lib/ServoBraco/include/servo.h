@@ -10,7 +10,7 @@
 #define GLOBAL_PWM_FREQ 50
 
 #define UPDATE_STEP 20
-#define DEFAULT_FEEDRATE 60.0
+#define DEFAULT_FEEDRATE 50.0
 
 typedef enum { STOP, FORWARD, BACKWARD } ServoDirecao;
 

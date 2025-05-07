@@ -17,7 +17,7 @@ class Braco
   Servo cotovelo{4, 2, -70.0, +70.0, -70.0};
   Servo pulsoFlexao{16, 3, -70.0, 30.0, -70.0};
   Servo pulsoRotacao{17, 4, -70.0, +70.0, 0.0};
-  Servo garra{5, 5, 0.0, +60.0, 0.0};
+  Servo garra{5, 5, -40.0, +40.0, 0.0};
 
   void init(void);
   void update(void);
