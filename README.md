@@ -5,6 +5,42 @@ O _target_ do projeto é um ESP32, e o controle é feito utilizando o controlado
 Os servos são alimentados com 6 volts de uma fonte externa, e o sinal de controle é fornecido via um conversor lógico de MOSFETs, que aumenta os 3,3 volts do ESP32 para os 6 volts dos servos.
 
 
+## Uso do Braço
+
+O programa de demonstração inclui duas formas de controle: via comandos do computador pela interface serial, e via um joystick conectado diretamente ao ESP32.
+
+### Controle via Serial
+
+Para controlar o braço pelo computador, é preciso digitar uma letra seguida de um número _float_.
+A letra determina qual servo será controlado, e o número é a posição em graus desejada.
+Caso o número _float_ esteja fora do range seguro para o servo, o microcontrolador automaticamente o corrige para o valor seguro mais próximo.
+
+Abaixo segue uma tabela com os comandos para cada servo:
+
+| Servo | Comando |
+|-|-|
+| Rotação | Q |
+| Ombro | W |
+| Cotovelo | E |
+| Flexão do Pulso | R |
+| Rotação do Pulso | T |
+| Garra | F | 
+
+Adicionalmente, pode se realizar uma parada de emergência de todos os servos com o comando P.
+
+### Controle via Joystick
+
+O braço também pode ser controlado com o joystick conectado ao ESP32.
+Primeiramente, é preciso ativar o joystick apertando o botão E.
+Após isso, o _stick_ analógico controlará o movimento do braço (de acordo com o modo atual, mais sobre isso a diante), enquanto a garra pode ser controlada com os botões A e C.
+
+Para utilizar o mesmo _stick_ analógico no controle de todos os servos, o microcontrolador trabalha com dois modos de controle: 
+
+- **Extensão/Rotação**: movimento no eixo Y controla a extensão do braço (servos Ombro e Cotovelo trabalham em conjunto) enquanto o eixo X controla a rotação do braço;
+- **Pulso**: eixo Y controla a flexão do pulso, enquanto o eixo X controla a rotação do pulso.
+
+A troca entre os modos é realizada com o aperto do botão K (pressionar o _stick_ analógico).
+
 ## Biblioteca ServoBraco
 
 O código de controle do braço foi implementado com a criação da biblioteca ServoBraco, que permite reutilizar essa funcionalidade em outros projetos.
