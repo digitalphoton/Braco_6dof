@@ -151,6 +151,38 @@ Caso queira mudar a feedrate para 25 graus por segundo, para um movimento mais c
 meuBraco.rotacao.setFeedRate(25.0);
 ```
 
+## Biblioteca Controle
+
+Esta biblioteca define uma classe Controle, que reúne o _stick_ e os botões sob um único objeto.
+Os eixos do _stick_ são definidos como instâncias da classe Potenciometro, enquanto todos os botões são instâncias da classe Botao.
+Ambas as classes possuem em comum os parâmetros `id` e `pin`, que guardam um caractére identificador e um número de pino, respectivamente.
+Também possuem os métodos `init()`, para inicialização, e `update()` para atualizar seus valores armazenados com base no estado atual dos componentes físicos.
+
+### Classe Potenciometro
+
+A classe em questão possui uma variável `value`, que guarda um valor _float_ referente à posição atual do potenciômetro físico.
+Nesse caso, 0.0 indica a posição central, 1.0 a posição máxima, e -1.0 a posição mínima.
+Além disso, possuimos a variável `offset`, utilizada para calibração do ponto central, e a variável `deadzone`, que define a deflexão mínima que o potenciômetro precisa ter para o _software_ registrar um movimento (isso evita que haja movimentos espúrios quando o _stick_ está quase, mas não exatamente, no centro).
+
+Há também o método específico `getValue()`, que quando chamado retorna o valor atual da variável `value`.
+
+### Classe Botao
+
+A classe Botao possui as variáveis booleanas `curState` e `prevState`, que guardam o estado atual e o anterior do botão, respectivamente.
+É necessário saber o último estado do botão para poder realizar detecção de bordas, para os métodos `isRisingEdge()` e `isFallingEdge()`.
+Esses métodos retornam um valor booleano indicando se o botão está sendo pressionado ou solto nesse exato momento.
+Isto é útil para eventos que devem ocorrer apenas no momento exato que o botão é apertado ou solto, e não repetidos enquanto ele é segurado.
+
+Caso o evento deva acontecer continuamente enquanto o botão estiver apertado, o método `getState()` retorna apenas o valor de `curState`, indicando o estado atual do botão.
+
+### Classe Controle
+
+Por fim, essa classe reune todas as instâncias necessárias para o _joystick_  em um único objeto.
+Além de poder acessar diretamente cada um dos objetos (eles são definidos como públicos), o usuário da classe pode chamar os métodos `init()`, que roda as funções de inicialização de cada uma das instâncias, e `update()`, que atualiza os valores de todas as instâncias.
+
+O método `getModoAtual()` indica qual modo de controle está ativo no momento, de acordo com a variável `modoAtual`.
+É possível ativar ou desativar o _joystick_ com o método `flipAtivoState()`, e verificar a situação atual com `getAtivoState()`.
+
 ## TO-DO
 
 ### Controle manual
