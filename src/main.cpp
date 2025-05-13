@@ -1,21 +1,22 @@
 #include <Arduino.h>
 #include <ServoBraco.h>
+#include <controle.h>
 
-#include <string>
-
-// Intervalo de tempo entre updates, em millisegundos
-#define UPDATE_STEP 20
-
-typedef enum {STARTUP, STANDBY, RECEIVING, MOVING, UPDATING} Estados;
+typedef enum {STARTUP, STANDBY, RECEIVING, MANUAL_CONTROL, UPDATING, LOGGING} Estados;
 
 Braco braco;
-Estados estado;
+Controle controle;
+Estados estadoAtual;
+Estados estadoProximo;
 
+unsigned long g_tickLastPoll = 0;
 unsigned long g_tickLastUpdate = 0;
+unsigned long g_tickLastLog = 0;
+unsigned long g_counter;
 
-void setup()
-{
-	estado = STARTUP;
+void setup() {
+	estadoAtual = STARTUP;
+	estadoProximo = STANDBY;
 
 	Serial.begin(115200);
 	while(!Serial);
@@ -27,67 +28,93 @@ void setup()
 
 	// Esperar entrada, e depois descartar os bytes recebidos
 	while(!Serial.available());
-	while(Serial.available() > 0)
-	{
+	while(Serial.available() > 0) {
 		Serial.read();
 	}
 
 	braco.init();
+	controle.init();
 
 	delay(2000);
 	Serial.println("Braço inicializado!");
 	delay(2000);
-
-	estado = STANDBY;
 }
 
-void loop()
-{
-	/*braco.setRotacao(-70.0, true);
-	braco.setPulsoFlexao(-70.0, true);
-	braco.setGarra(70.0, true);
-	braco.setPulsoFlexao(0.0, true);
-	braco.setRotacao(0.0, true);
-
-	braco.setRotacao(70.0, true);
-	braco.setPulsoFlexao(-70.0, true);
-	braco.setGarra(0.0, true);
-	braco.setPulsoFlexao(0.0, true);
-	braco.setRotacao(0.0, true);
-
-	braco.setRotacao(70.0, true);
-	braco.setPulsoFlexao(-70.0, true);
-	braco.setGarra(70.0, true);
-	braco.setPulsoFlexao(0.0, true);
-	braco.setRotacao(0.0, true);
-
-	braco.setRotacao(-70.0, true);
-	braco.setPulsoFlexao(-70.0, true);
-	braco.setGarra(0.0, true);
-	braco.setPulsoFlexao(0.0, true);
-	braco.setRotacao(0.0, true);*/
-
+void loop() {
 	unsigned long tickAtual = millis();
+	char receiveBuffer[10];
+	estadoAtual = estadoProximo;
 
-	switch(estado)
-	{
+	switch(estadoAtual) {
 		default:
 		case STANDBY:
-		{
 			if(tickAtual >= g_tickLastUpdate + UPDATE_STEP)
 			{
-				estado = UPDATING;
+				estadoProximo = UPDATING;
 			}
-			if(Serial.available())
+			else if(tickAtual > g_tickLastPoll)
 			{
-				estado = RECEIVING;
+				estadoProximo = MANUAL_CONTROL;
+			}
+			else if(tickAtual >= g_tickLastLog + 1000)
+			{
+				estadoProximo = LOGGING;
+			}
+			else if(Serial.available())
+			{
+				estadoProximo = RECEIVING;
 			}
 			break;
-		}
+		case UPDATING:
+			braco.update();
+			g_tickLastUpdate = tickAtual;
 
+			estadoProximo = STANDBY;
+			break;
+		case MANUAL_CONTROL: {
+			controle.update();
+
+			if(controle.botaoE.isRisingEdge()) {
+				controle.flipAtivoState();
+			}
+			if(controle.getAtivoState()) {
+				switch(controle.getModoAtual())
+				{
+					default:
+					case ROTEXT: {
+						braco.rotacao.move(_VALUE_TO_DIRECTION(-controle.axisX.getValue()));
+						braco.ombro.move(_VALUE_TO_DIRECTION(controle.axisY.getValue()));
+						braco.cotovelo.move(_VALUE_TO_DIRECTION(-controle.axisY.getValue()));
+						braco.pulsoRotacao.stop();
+						braco.pulsoFlexao.stop();
+						break;
+					}
+					case PULSO: {
+						braco.rotacao.stop();
+						braco.ombro.stop();
+						braco.cotovelo.stop();
+						braco.pulsoRotacao.move(_VALUE_TO_DIRECTION(controle.axisX.getValue()));
+						braco.pulsoFlexao.move(_VALUE_TO_DIRECTION(-controle.axisY.getValue()));
+						break;
+					}
+				}
+
+				if (controle.botaoA.getState()) {
+					braco.garra.move(FORWARD);
+				}
+				else if (controle.botaoC.getState()) {
+					braco.garra.move(BACKWARD);
+				}
+				else {
+					braco.garra.stop();
+				}
+			}
+
+			g_tickLastPoll = tickAtual;
+			estadoProximo = STANDBY;
+			break;
+		}
 		case RECEIVING:
-		{
-			char receiveBuffer[10];
 			for(uint8_t i; i < 10; i++)
 			{
 				receiveBuffer[i] = Serial.read();
@@ -99,19 +126,23 @@ void loop()
 			}
 			// primeiro caractere vai para comando, o resto da string é
 			// convertida para número e vai para argumento
-			char comando = receiveBuffer[0];
-			float argumento = atof(&receiveBuffer[1]);
-			braco.atuar(comando, argumento);
+			braco.atuar(receiveBuffer[0], atof(&receiveBuffer[1]));
 
-			estado = STANDBY;
+			estadoProximo = STANDBY;
 			break;
-		}
-		case UPDATING:
-		{
-			braco.update();
-			estado = STANDBY;
-			g_tickLastUpdate = tickAtual;
+		case LOGGING:
+			Serial.print("Controle Modo = ");
+			Serial.print(controle.getModoAtual());
+			Serial.print("; Controle Ativo = ");
+			Serial.print(controle.getAtivoState());
+			Serial.print("; ciclos por segundo = ");
+			Serial.print(g_counter);
+			Serial.println();
+
+			g_counter = 0;
+			g_tickLastLog = tickAtual;
+			estadoProximo = STANDBY;
 			break;
-		}
 	}
+	g_counter++;
 }
