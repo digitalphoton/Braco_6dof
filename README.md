@@ -4,6 +4,9 @@ Esse código foi desenvolvido para realizar o controle de um braço mecânico de
 O _target_ do projeto é um ESP32, e o controle é feito utilizando o controlador PWM embutido no próprio chip do ESP32, também chamado de periférico LED Control (LEDC).
 Os servos são alimentados com 6 volts de uma fonte externa, e o sinal de controle é fornecido via um conversor lógico de MOSFETs, que aumenta os 3,3 volts do ESP32 para os 6 volts dos servos.
 
+Os pinos referentes aos servos podem ser encontrados no arquivo `lib/ServoBraco/include/braco.h`, no primeiro parâmetro das instanciações dos servos (ou seja, o primeiro valor númerico depois da abertura da chave nas linhas 15 a 20 do arquivo).
+Já os pinos do joystick estão no arquivo `lib/Controle/include/controle.h`, nas linhas 61 a 71.
+Neste caso, são o último valor da instanciação (o número logo antes do fechamento da chave).
 
 ## Uso do Braço
 
