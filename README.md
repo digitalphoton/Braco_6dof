@@ -52,7 +52,7 @@ O código de controle do braço foi implementado com a criação da biblioteca S
 
 Para usá-la, começe incluindo o arquivo header principal da biblioteca em sua main.cpp (ou em sua sketch .ino, caso use a IDE do Arduino).
 Em seguida, defina uma instância da classe Braco, e a inicialize na ```setup()```.
-Além disso, na versão atual da biblioteca (commit ```rewrite-9cfbed2```), é preciso implementar uma máquina de estados que atualize os motores do braço a cada 20 millisegundos.
+Além disso, na versão atual da biblioteca, é preciso implementar uma máquina de estados que atualize os motores do braço a cada 20 millisegundos.
 Abaixo um exemplo de código mínimo de inicialização:
 
 ```c++
