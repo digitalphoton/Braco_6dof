@@ -8,6 +8,9 @@ Os servos são alimentados com 6 volts de uma fonte externa, e o sinal de contro
 ## Biblioteca ServoBraco
 
 O código de controle do braço foi implementado com a criação da biblioteca ServoBraco, que permite reutilizar essa funcionalidade em outros projetos.
+
+### Inicialização
+
 Para usá-la, começe incluindo o arquivo header principal da biblioteca em sua main.cpp (ou em sua sketch .ino, caso use a IDE do Arduino).
 Em seguida, defina uma instância da classe Braco, e a inicialize na ```setup()```.
 Além disso, na versão atual da biblioteca (commit ```rewrite-9cfbed2```), é preciso implementar uma máquina de estados que atualize os motores do braço a cada 20 millisegundos.
@@ -19,49 +22,55 @@ Abaixo um exemplo de código mínimo de inicialização:
 // Definir um tipo customizado, contendo os nossos estados
 typedef enum {STARTUP, STANDBY, UPDATE} Estados;
 
-Estados estadoAtual = STARTUP;
-Braco meuBraco;
+// Variaveis globais de estado
+Estados g_estadoAtual = STARTUP;
+Estados g_estadoProximo = STANDBY;
 
-unsigned long ultimoUpdate = 0;
+// Declarar uma instancia da classe Braco
+Braco g_meuBraco;
+
+unsigned long g_ultimoUpdate = 0;
 
 void setup()
 {
-	meuBraco.init();
+	// Inicializar o braco
+	g_meuBraco.init();
 
 	// Entrar em STANDBY ao fim da inicialização
-	estadoAtual = STANDBY;
+	g_estadoAtual = STANDBY;
 }
 
 void loop()
 {
+	g_estadoAtual = g_estadoProximo;
+
 	// Entrar no estado UPDATE a cada 20 ms
-	if(millis() >= ultimoUpdate + 20)
+	if(millis() >= g_ultimoUpdate + 20)
 	{
-		estadoAtual = UPDATE;
-		ultimoUpdate = millis();
+		g_estadoProximo = UPDATE;
+		g_ultimoUpdate = millis();
 	}
 
 	switch(estadoAtual)
 	{
 		default:
 		case STANDBY:
-
 			// Fazer nada :)
 			break;
-		
 		case UPDATE:
+			g_meuBraco.update();
 
-			meuBraco.update();
-
-			// *** Muito importante!!! ***
+			// *** Importante!!! ***
 			//	Voltar para STANDBY após o UPDATE. É fácil esquecer de
 			// 	implementar a saída de um estado, e ficar eternamente preso 
 			// 	nele
-			estadoAtual = STANDBY;
+			g_estadoProximo = STANDBY;
 			break;
 	}
 }
 ```
+
+### Movimentação dos Servos
 
 O braço possui 6 motores servo, a maior parte nomeados com base em analogia com a anatomia humana:
 
@@ -73,25 +82,41 @@ O braço possui 6 motores servo, a maior parte nomeados com base em analogia com
 - Servo da garra (```garra```)
 
 Cada um desses servos está implementado como uma instância da classe servo, dentro da classe Braco.
-Para movimentá-los, usa-se o método ```setTargetPosition(posDegree, newFeedRate)```, dando como argumentos a nova posição desejada (em graus de rotação do servo) e a _feedrate_ desejada, ou seja, a velocidade com que o servo se moverá (em graus por segundo).
-Um bom feedrate para se utilizar na maior parte dos casos é ```20.0``` graus por segundo.
-Para mover o braço declarado acima para a posição de -30 graus com _feedrate_ de 20 graus por segundo, por exemplo:
+Para movimentá-los, usa-se o método ```setTargetPosition(posDegree)```, dando como argumento a nova posição desejada (em graus de rotação do servo).
+Para mover o braço declarado acima para uma posição de rotação de -30 graus, por exemplo:
 
 ```c++
-meuBraco.rotacao.setTargetPosition(30.0, 20.0);
+meuBraco.rotacao.setTargetPosition(-30.0);
 ```
 
 Observe que essa função não move o servo por si só, mas sim define sua nova posição-alvo.
 Toda vez que o braço entrar no estado de atualização, ele moverá todos os servos que não estiverem na posição-alvo por um pequeno valor, de acordo com a velocidade definida. 
 Dessa forma, é possível mover vários servos de uma vez só, e também realizar outras tarefas enquanto o movimento é executado.
 
+Alternativamente, é possível apenas mandar um servo se mover em uma direção por tempo indeterminado com a função ```move()```. 
+Esse movimento pode ser então interrompido com ```stop()```.
+Observe que todos os servos tem mínimos e máximos definidos no arquivo ```include/braco.h```, e serão também automaticamente parados quando chegarem nas bordas desse range.
+Exemplo:
+
+```c++
+meuBraco.rotacao.move(FORWARD);
+delay(100);
+meuBraco.rotacao.move(BACKWARD);
+delay(100);
+meuBraco.rotacao.stop();
+```
+
+Por padrão, os servos se movem com uma velocidade de 50 graus por segundo.
+Essa velocidade pode ser alterada com a função ```setFeedRate()```.
+É comum, no contexto de máquinas CNC, denominar a velocidade de movimento como feedrate, e por isso essa convenção também foi utilizada aqui.
+Caso queira mudar a feedrate para 25 graus por segundo, para um movimento mais controlado:
+
+```c++
+meuBraco.rotacao.setFeedRate(25.0);
+```
+
 ## TO-DO
 
 ### Controle manual
-
-- ~~Implementar uma função que receba um comando e atue o servo correspondente~~
-	- Extender essa função para um botão
-	- Extender essa função para um controle analógico
-		- O valor analógico modula o feedrate?
 
 - Estudar a viabilidade de mudar o mecanismo de atualização com interrupções por timer de modo a eliminar a necessidade da máquina de estados e simplificar o uso da biblioteca.
