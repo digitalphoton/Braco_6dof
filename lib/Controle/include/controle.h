@@ -58,11 +58,11 @@ class Controle {
 
 	Controle(ControleModos newModoAtual = ROTEXT);
 
-	Potenciometro axisX{'X', 36};
-	Potenciometro axisY{'Y', 39};
-	Botao botaoK{'K', 34};
+	Potenciometro axisX{'X', 35};
+	Potenciometro axisY{'Y', 32};
+	Botao botaoK{'K', 33};
 
-	Botao botaoA{'A', 25};
+	Botao botaoA{'A', 34};
 	Botao botaoB{'B', 26};
 	Botao botaoC{'C', 27};
 	Botao botaoD{'D', 14};

@@ -12,12 +12,12 @@ class Braco
 {
   public:
 
-  Servo rotacao{15, 0, -70.0, +70.0, 0.0};
-  Servo ombro{2, 1, -30.0, +70.0, 10.0};
-  Servo cotovelo{4, 2, -70.0, +70.0, -70.0};
-  Servo pulsoFlexao{16, 3, -70.0, 30.0, -70.0};
-  Servo pulsoRotacao{17, 4, -70.0, +70.0, 0.0};
-  Servo garra{5, 5, -40.0, +40.0, 0.0};
+  Servo rotacao{4, 0, -70.0, +70.0, 0.0};
+  Servo ombro{18, 1, -30.0, +70.0, 10.0};
+  Servo cotovelo{19, 2, -70.0, +70.0, -70.0};
+  Servo pulsoFlexao{21, 3, -70.0, 30.0, -70.0};
+  Servo pulsoRotacao{22, 4, -70.0, +70.0, 0.0};
+  Servo garra{23, 5, -40.0, +40.0, 0.0};
 
   void init(void);
   void update(void);

@@ -34,7 +34,6 @@ void setup() {
 
 	braco.init();
 	controle.init();
-
 	delay(2000);
 	Serial.println("Braço inicializado!");
 	delay(2000);
